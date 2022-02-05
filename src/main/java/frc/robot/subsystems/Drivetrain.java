@@ -42,11 +42,11 @@ public class Drivetrain extends SubsystemBase {
 
         leftFront = new PWMSparkMax(7);
         addChild("LeftFront",leftFront);
-        leftFront.setInverted(false);
+        leftFront.setInverted(true);
 
         leftBack = new PWMSparkMax(11);
         addChild("LeftBack",leftBack);
-        leftBack.setInverted(false);
+        leftBack.setInverted(true);
 
         leftGroup = new MotorControllerGroup(leftFront, leftBack  );
         addChild("LeftGroup",leftGroup);
