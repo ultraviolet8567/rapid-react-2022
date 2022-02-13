@@ -39,7 +39,7 @@ public class RobotContainer {
     // The robot's subsystems
     public final Hanger m_hanger = new Hanger();
     public final Storage m_storage = new Storage();
-    public final Input m_input = new Input();
+    public final Collection m_collection = new Collection();
     public final Shooter m_shooter = new Shooter();
     public final Drivetrain m_drivetrain = new Drivetrain();
 
@@ -59,7 +59,7 @@ public class RobotContainer {
         // SmartDashboard Buttons
         SmartDashboard.putData("Autonomous Command", new AutonomousCommand());
         SmartDashboard.putData("Drive", new Drive( m_drivetrain ));
-        SmartDashboard.putData("Intake", new Intake( m_input ));
+        SmartDashboard.putData("Intake", new Intake( m_collection ));
         SmartDashboard.putData("Shoot", new Shoot( m_shooter ));
         SmartDashboard.putData("ExtendHanger", new ExtendHanger( m_hanger ));
         SmartDashboard.putData("RetractHanger", new RetractHanger( m_hanger ));
@@ -99,8 +99,8 @@ public class RobotContainer {
         SmartDashboard.putData("RightBumper",new Shoot( m_shooter ) );
 
         final JoystickButton buttonA = new JoystickButton(xboxController, XboxController.Button.kA.value);        
-        buttonA.whenPressed(new Intake( m_input ) ,true);
-        SmartDashboard.putData("ButtonA",new Intake( m_input ) );
+        buttonA.whenPressed(new Intake( m_collection ) ,true);
+        SmartDashboard.putData("ButtonA",new Intake( m_collection ) );
 
         final JoystickButton backButton = new JoystickButton(xboxController, XboxController.Button.kBack.value);        
         backButton.whileHeld(new RetractHanger( m_hanger ) ,false);
