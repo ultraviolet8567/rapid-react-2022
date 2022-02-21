@@ -21,7 +21,7 @@ public class Collection extends SubsystemBase {
         intake = new CANSparkMax(13, MotorType.kBrushless);
         intake.setInverted(false);
 
-        conveyor = new CANSparkMax(6, MotorType.kBrushless);
+        conveyor = new CANSparkMax(1, MotorType.kBrushless);
         conveyor.setInverted(false);
 
         detectorTop = new DigitalInput(0);
