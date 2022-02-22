@@ -18,5 +18,8 @@ public class Constants {
         public static final int kRightMotor2Port = 3; 
     } 
     */
+
+    public static double intakeSpeed = 0.5;
+    public static double conveyorSpeed = 0.5;
 }
 
