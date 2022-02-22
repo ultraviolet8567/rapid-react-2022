@@ -8,6 +8,8 @@ import frc.robot.subsystems.Collection;
 
 public class Intake extends CommandBase {
     private final Collection m_collection;
+    private boolean ballReachedBottom = false;
+    private boolean ballReachedTop = false;
     
     public Intake(Collection subsystem) {
         m_collection = subsystem;
@@ -26,9 +28,11 @@ public class Intake extends CommandBase {
     public void execute() {
         if (m_collection.ballTop()) {
             m_collection.runConveyor(0, ControlType.kVelocity);
+            ballReachedTop = true;
         }
         if (m_collection.ballBottom()) {
             m_collection.runIntake(0, ControlType.kVelocity);
+            ballReachedBottom = true;
         }
     }
 
@@ -42,7 +46,7 @@ public class Intake extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return m_collection.ballTop() && m_collection.ballBottom();
+        return ballReachedTop && ballReachedBottom;
     }
 
     @Override
