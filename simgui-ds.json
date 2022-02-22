@@ -4,6 +4,11 @@
       "visible": false
     }
   },
+  "Keyboard 0 Settings": {
+    "window": {
+      "visible": true
+    }
+  },
   "keyboardJoysticks": [
     {
       "axisConfig": [
@@ -26,7 +31,7 @@
           "keyRate": 0.009999999776482582
         }
       ],
-      "axisCount": 3,
+      "axisCount": 4,
       "buttonCount": 5,
       "buttonKeys": [
         -1,
@@ -101,7 +106,7 @@
   ],
   "robotJoysticks": [
     {
-      "guid": "030000006d04000016c2000000000000"
+      "guid": "Keyboard0"
     }
   ]
 }

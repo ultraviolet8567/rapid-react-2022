@@ -6,11 +6,6 @@
       }
     },
     "Other Devices": {
-      "SPARK MAX [1]": {
-        "header": {
-          "open": true
-        }
-      },
       "SPARK MAX [4]": {
         "header": {
           "open": true
@@ -58,6 +53,12 @@
       "Collection": {
         "open": true
       }
+    },
+    "SmartDashboard": {
+      "Collection": {
+        "open": true
+      },
+      "open": true
     }
   }
 }
