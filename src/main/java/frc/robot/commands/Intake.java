@@ -19,8 +19,8 @@ public class Intake extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        m_collection.runIntake(Constants.intakeSpeed, ControlType.kVelocity);
-        m_collection.runConveyor(Constants.intakeSpeed, ControlType.kVelocity);
+        if (!m_collection.ballTop()) { m_collection.runConveyor(Constants.intakeSpeed, ControlType.kVelocity); }
+        if (!m_collection.ballBottom()) { m_collection.runIntake(Constants.intakeSpeed, ControlType.kVelocity); }
     }
 
     // Called every time the scheduler runs while the command is scheduled.
