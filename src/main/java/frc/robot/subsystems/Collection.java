@@ -57,7 +57,7 @@ public class Collection extends SubsystemBase {
     // Returns whether a ball is detected by the bottom photoelectric sensor
     public boolean ballBottom() {
         // Flip the value of the DIO since detection corresponds to 0
-        return !detectorTop.get();
+        return !detectorBottom.get();
     }
 
     // Sets a parameter (type) of the intake to the given value (setPoint)
