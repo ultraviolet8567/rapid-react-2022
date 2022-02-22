@@ -113,7 +113,7 @@ public class RobotContainer {
         rightBumper.whileHeld(new Shoot(m_shooter), true);
 
         final JoystickButton buttonA = new JoystickButton(xboxController, XboxController.Button.kA.value);        
-        buttonA.whenPressed(new Intake(m_collection), true);
+        buttonA.toggleWhenPressed(new Intake(m_collection), true);
 
         final JoystickButton backButton = new JoystickButton(xboxController, XboxController.Button.kBack.value);        
         backButton.whileHeld(new RetractHanger(m_hanger), false);
