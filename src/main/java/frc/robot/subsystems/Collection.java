@@ -38,6 +38,7 @@ public class Collection extends SubsystemBase {
         SmartDashboard.putNumber("Collection/Conveyor velocity", conveyor.getEncoder().getVelocity());
         SmartDashboard.putBoolean("Collection/Detected - Top ball", ballTop());
         SmartDashboard.putBoolean("Collection/Detected - Bottom ball", ballBottom());
+        SmartDashboard.putNumber("Ball count", (ballTop() ? 1 : 0) + (ballBottom() ? 1 : 0));
     }
 
     // This method will be called once per scheduler run when in simulation
@@ -66,11 +67,21 @@ public class Collection extends SubsystemBase {
         pid_controller.setReference(setPoint, type);
     }
 
+    // Add overload to runIntake that does not use PID
+    public void runIntake(double speed) {
+        intake.set(speed);
+    }
+
     // Sets a parameter (type) of the intake to the given value (setPoint)
     // e.g. possible parameters are ControlType.kDutyCycle, ControlType.kPosition, ControlType.kVelocity, and ControlType.kVoltage
     public void runConveyor(double setPoint, ControlType type) {
         SparkMaxPIDController pid_controller = RobotContainer.getDefaultPIDController(conveyor);
         pid_controller.setReference(setPoint, type);
+    }
+
+    // Add overload to runConveyor that does not use PID
+    public void runConveyor(double speed) {
+        conveyor.set(speed);
     }
 }
 
