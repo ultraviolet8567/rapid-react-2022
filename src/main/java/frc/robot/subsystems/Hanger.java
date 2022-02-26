@@ -3,19 +3,18 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxPIDController;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import frc.robot.RobotContainer;
 
 public class Hanger extends SubsystemBase {
 
     private CANSparkMax left;
     private CANSparkMax right;
-    private MotorControllerGroup hangerGroup;
 
     public Hanger() {
         left = new CANSparkMax(8, MotorType.kBrushless);
@@ -23,14 +22,13 @@ public class Hanger extends SubsystemBase {
 
         right = new CANSparkMax(9, MotorType.kBrushless);
         right.setInverted(false);
-
-        hangerGroup = new MotorControllerGroup(left, right  );
-        addChild("HangerGroup",hangerGroup);
     }
 
     // This method will be called once per scheduler run
     @Override
     public void periodic() {
+        SmartDashboard.putNumber("Hanger/Left motor velocity", left.getEncoder().getVelocity());
+        SmartDashboard.putNumber("Collection/Right motor velocity", right.getEncoder().getVelocity());
     }
 
     // This method will be called once per scheduler run when in simulation
@@ -43,8 +41,8 @@ public class Hanger extends SubsystemBase {
     // Sets a parameter (type) of the hanger motors to the given value (setPoint)
     // e.g. possible parameters are ControlType.kDutyCycle, ControlType.kPosition, ControlType.kVelocity, and ControlType.kVoltage
     public void runHanger(double setPoint, ControlType type) {
-        SparkMaxPIDController left_controller = left.getPIDController();
-        SparkMaxPIDController right_controller = right.getPIDController();
+        SparkMaxPIDController left_controller = RobotContainer.getDefaultPIDController(left);
+        SparkMaxPIDController right_controller = RobotContainer.getDefaultPIDController(right);
         left_controller.setReference(setPoint, type);
         right_controller.setReference(setPoint, type);
     }
