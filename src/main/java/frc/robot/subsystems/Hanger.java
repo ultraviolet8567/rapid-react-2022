@@ -17,10 +17,10 @@ public class Hanger extends SubsystemBase {
     private CANSparkMax right;
 
     public Hanger() {
-        left = new CANSparkMax(8, MotorType.kBrushless);
+        left = new CANSparkMax(5, MotorType.kBrushless);
         left.setInverted(false);
 
-        right = new CANSparkMax(9, MotorType.kBrushless);
+        right = new CANSparkMax(6, MotorType.kBrushless);
         right.setInverted(false);
     }
 
