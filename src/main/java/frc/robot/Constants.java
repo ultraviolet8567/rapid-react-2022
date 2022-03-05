@@ -22,5 +22,7 @@ public class Constants {
     public static double intakeSpeed = 0.5;
     public static double conveyorSpeed = 0.5;
     public static double hangerSpeed = 0.36;
+    public static double shooter1Speed = 0.75;
+    public static double shooter2Speed = 0.5;
 }
 

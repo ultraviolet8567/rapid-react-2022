@@ -4,10 +4,14 @@ package frc.robot;
 
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
+
+import com.revrobotics.CANSparkMax.ControlType;
+
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Shooter;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -91,6 +95,9 @@ public class Robot extends TimedRobot {
         if (m_autonomousCommand != null) {
             m_autonomousCommand.cancel();
         }
+
+        RobotContainer.getInstance().m_shooter.runShooter1(Constants.shooter1Speed, ControlType.kVelocity);
+        RobotContainer.getInstance().m_shooter.runShooter2(Constants.shooter2Speed, ControlType.kVelocity);
     }
 
     /**
