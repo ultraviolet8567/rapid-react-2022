@@ -26,20 +26,25 @@
       "/LiveWindow/Collection/DetectorBottom": "Digital Input",
       "/LiveWindow/Collection/DetectorTop": "Digital Input",
       "/LiveWindow/Collection/inputGroup": "Motor Controller",
+      "/LiveWindow/Drivetrain": "Subsystem",
       "/LiveWindow/Drivetrain/LeftGroup": "Motor Controller",
       "/LiveWindow/Drivetrain/RightGroup": "Motor Controller",
+      "/LiveWindow/Hanger": "Subsystem",
       "/LiveWindow/Hanger/HangerGroup": "Motor Controller",
       "/LiveWindow/Shooter": "Subsystem",
       "/LiveWindow/Shooter/ShooterMCGroup": "Motor Controller",
       "/LiveWindow/Storage": "Subsystem",
       "/LiveWindow/Storage/StorageMC": "Motor Controller",
+      "/LiveWindow/Ungrouped/DifferentialDrive[1]": "DifferentialDrive",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
       "/SmartDashboard/Auto Mode": "String Chooser",
       "/SmartDashboard/Auto choices": "String Chooser",
       "/SmartDashboard/Autonomous Command": "Command",
       "/SmartDashboard/BackButton": "Command",
       "/SmartDashboard/ButtonA": "Command",
+      "/SmartDashboard/Differential Drive": "DifferentialDrive",
       "/SmartDashboard/Drive": "Command",
+      "/SmartDashboard/DriveToggle": "Command",
       "/SmartDashboard/ExtendHanger": "Command",
       "/SmartDashboard/Intake": "Command",
       "/SmartDashboard/RetractHanger": "Command",
@@ -55,7 +60,7 @@
       }
     },
     "SmartDashboard": {
-      "Collection": {
+      "Differential Drive": {
         "open": true
       },
       "open": true

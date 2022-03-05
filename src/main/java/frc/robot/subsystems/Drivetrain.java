@@ -49,12 +49,12 @@ public class Drivetrain extends SubsystemBase {
     // This method will be called once per scheduler run
     @Override
     public void periodic() { 
-        SmartDashboard.putData("Differential Drive", differentialDrive);
-        SmartDashboard.putNumber("Motor Speed: Left Front", leftFront.get());
-        SmartDashboard.putNumber("Motor Speed: Right Front", rightFront.get());
-        SmartDashboard.putNumber("Motor Speed: Left Back", leftBack.get());
-        SmartDashboard.putNumber("Motor Speed: Right Back", rightBack.get());
-        SmartDashboard.putString("Drive Setting", singleStickOperation ? "Single Stick" : "Split Control");
+        SmartDashboard.putData("Drivetrain/Differential Drive", differentialDrive);
+        SmartDashboard.putNumber("Drivetrain/Motor Speed: Left Front", leftFront.get());
+        SmartDashboard.putNumber("Drivetrain/Motor Speed: Right Front", rightFront.get());
+        SmartDashboard.putNumber("Drivetrain/Motor Speed: Left Back", leftBack.get());
+        SmartDashboard.putNumber("Drivetrain/Motor Speed: Right Back", rightBack.get());
+        SmartDashboard.putString("Drivetrain/Drive Setting", singleStickOperation ? "Single Stick" : "Split Control");
     }
 
     // This method will be called once per scheduler run when in simulation
