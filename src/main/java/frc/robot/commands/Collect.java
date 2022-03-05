@@ -6,12 +6,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Collection;
 
-public class Intake extends CommandBase {
+public class Collect extends CommandBase {
     private final Collection m_collection;
     private boolean ballReachedBottom = false;
     private boolean ballReachedTop = false;
     
-    public Intake(Collection subsystem) {
+    public Collect(Collection subsystem) {
         m_collection = subsystem;
         addRequirements(m_collection);
     }
