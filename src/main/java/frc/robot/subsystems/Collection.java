@@ -38,7 +38,7 @@ public class Collection extends SubsystemBase {
         SmartDashboard.putNumber("Collection/Conveyor velocity", conveyor.getEncoder().getVelocity());
         SmartDashboard.putBoolean("Collection/Detected - Top ball", ballTop());
         SmartDashboard.putBoolean("Collection/Detected - Bottom ball", ballBottom());
-        SmartDashboard.putNumber("Ball count", (ballTop() ? 1 : 0) + (ballBottom() ? 1 : 0));
+        SmartDashboard.putNumber("Collection/Ball count", (ballTop() ? 1 : 0) + (ballBottom() ? 1 : 0));
     }
 
     // This method will be called once per scheduler run when in simulation
