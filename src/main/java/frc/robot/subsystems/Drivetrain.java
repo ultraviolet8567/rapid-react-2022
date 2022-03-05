@@ -44,17 +44,16 @@ public class Drivetrain extends SubsystemBase {
         differentialDrive.setSafetyEnabled(true);
         differentialDrive.setExpiration(0.1);
         differentialDrive.setMaxOutput(0.5);
-
-        differentialDrive.arcadeDrive(1, 0);
     }
 
     // This method will be called once per scheduler run
     @Override
     public void periodic() { 
-        SmartDashboard.putNumber("Motor Speed: Left Front", leftFront.getEncoder().getVelocity());
-        SmartDashboard.putNumber("Motor Speed: Right Front", rightFront.getEncoder().getVelocity());
-        SmartDashboard.putNumber("Motor Speed: Left Back", leftBack.getEncoder().getVelocity());
-        SmartDashboard.putNumber("Motor Speed: Right Back", rightBack.getEncoder().getVelocity());
+        SmartDashboard.putData("Differential Drive", differentialDrive);
+        SmartDashboard.putNumber("Motor Speed: Left Front", leftFront.get());
+        SmartDashboard.putNumber("Motor Speed: Right Front", rightFront.get());
+        SmartDashboard.putNumber("Motor Speed: Left Back", leftBack.get());
+        SmartDashboard.putNumber("Motor Speed: Right Back", rightBack.get());
         SmartDashboard.putString("Drive Setting", singleStickOperation ? "Single Stick" : "Split Control");
     }
 

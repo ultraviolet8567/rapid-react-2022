@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
@@ -24,12 +23,6 @@ public class Drive extends CommandBase {
     @Override
     public void execute() {
         XboxController xbox = RobotContainer.getInstance().getXboxController();
-
-        SmartDashboard.putNumber("Left Joystick X", xbox.getLeftX());
-        SmartDashboard.putNumber("Left Joystick Y", xbox.getLeftY());
-        SmartDashboard.putNumber("Right Joystick X", xbox.getRightX());
-        SmartDashboard.putNumber("Right Joystick Y", xbox.getRightY());
-        SmartDashboard.putString("Description", m_drivetrain.getDifferentialDrive().getDescription());
 
         if (m_drivetrain.isSingleStickDrive()) {
             if (Math.abs(xbox.getLeftY()) > 0.1 || Math.abs(-xbox.getLeftX()) > 0.1) {
