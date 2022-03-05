@@ -26,7 +26,7 @@ public class Hanger extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Hanger/Left motor velocity", left.getEncoder().getVelocity());
-        SmartDashboard.putNumber("Collection/Right motor velocity", right.getEncoder().getVelocity());
+        SmartDashboard.putNumber("Hanger/Right motor velocity", right.getEncoder().getVelocity());
     }
 
     // This method will be called once per scheduler run when in simulation
