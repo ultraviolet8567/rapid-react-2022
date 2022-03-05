@@ -18,10 +18,10 @@ public class Collection extends SubsystemBase {
     private DigitalInput detectorBottom;
 
     public Collection() {
-        intake = new CANSparkMax(13, MotorType.kBrushless);
+        intake = new CANSparkMax(7, MotorType.kBrushless);
         intake.setInverted(false);
 
-        conveyor = new CANSparkMax(1, MotorType.kBrushless);
+        conveyor = new CANSparkMax(8, MotorType.kBrushless);
         conveyor.setInverted(false);
 
         detectorTop = new DigitalInput(0);
@@ -84,4 +84,3 @@ public class Collection extends SubsystemBase {
         conveyor.set(speed);
     }
 }
-
