@@ -4,10 +4,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Shooter;
 
-public class FlywheelTwoDecrease extends CommandBase {
+public class IncreaseSmallFlywheel extends CommandBase {
     private final Shooter m_shooter;
     
-    public FlywheelTwoDecrease(Shooter subsystem) {
+    public IncreaseSmallFlywheel(Shooter subsystem) {
         m_shooter = subsystem;
         addRequirements(m_shooter);
     }
@@ -20,7 +20,7 @@ public class FlywheelTwoDecrease extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        Constants.shooter2Speed -= 0.001;
+        Constants.smallFlywheelSpeed += 1;
     }
 
     // Called once the command ends or is interrupted.
