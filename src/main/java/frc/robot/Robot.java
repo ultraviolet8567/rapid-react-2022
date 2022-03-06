@@ -95,9 +95,6 @@ public class Robot extends TimedRobot {
         if (m_autonomousCommand != null) {
             m_autonomousCommand.cancel();
         }
-
-        RobotContainer.getInstance().m_shooter.runShooter1(Constants.shooter1Speed, ControlType.kVelocity);
-        RobotContainer.getInstance().m_shooter.runShooter2(Constants.shooter2Speed, ControlType.kVelocity);
     }
 
     /**

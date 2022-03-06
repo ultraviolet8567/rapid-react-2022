@@ -42,6 +42,17 @@
       "/SmartDashboard/Autonomous Command": "Command",
       "/SmartDashboard/BackButton": "Command",
       "/SmartDashboard/ButtonA": "Command",
+      "/SmartDashboard/Commands/Autonomous Command": "Command",
+      "/SmartDashboard/Commands/Collect": "Command",
+      "/SmartDashboard/Commands/Drive": "Command",
+      "/SmartDashboard/Commands/DriveToggle": "Command",
+      "/SmartDashboard/Commands/ExtendHanger": "Command",
+      "/SmartDashboard/Commands/FlywheelOneDecrease": "Command",
+      "/SmartDashboard/Commands/FlywheelOneIncrease": "Command",
+      "/SmartDashboard/Commands/FlywheelTwoDecrease": "Command",
+      "/SmartDashboard/Commands/FlywheelTwoIncrease": "Command",
+      "/SmartDashboard/Commands/RetractHanger": "Command",
+      "/SmartDashboard/Commands/Shoot": "Command",
       "/SmartDashboard/Differential Drive": "DifferentialDrive",
       "/SmartDashboard/Drive": "Command",
       "/SmartDashboard/DriveToggle": "Command",
@@ -60,6 +71,9 @@
       }
     },
     "SmartDashboard": {
+      "Commands": {
+        "open": true
+      },
       "Differential Drive": {
         "open": true
       },
