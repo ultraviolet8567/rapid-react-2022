@@ -4,18 +4,6 @@
       "window": {
         "visible": true
       }
-    },
-    "Other Devices": {
-      "SPARK MAX [4]": {
-        "header": {
-          "open": true
-        }
-      },
-      "SPARK MAX [5]": {
-        "header": {
-          "open": true
-        }
-      }
     }
   },
   "NTProvider": {
@@ -41,6 +29,7 @@
       "/SmartDashboard/Auto choices": "String Chooser",
       "/SmartDashboard/Autonomous Command": "Command",
       "/SmartDashboard/BackButton": "Command",
+      "/SmartDashboard/Bottom Detector": "Digital Input",
       "/SmartDashboard/ButtonA": "Command",
       "/SmartDashboard/Commands/Autonomous Command": "Command",
       "/SmartDashboard/Commands/Collect": "Command",
@@ -61,7 +50,8 @@
       "/SmartDashboard/RetractHanger": "Command",
       "/SmartDashboard/RightBumper": "Command",
       "/SmartDashboard/Shoot": "Command",
-      "/SmartDashboard/StartButton": "Command"
+      "/SmartDashboard/StartButton": "Command",
+      "/SmartDashboard/Top Detector": "Digital Input"
     }
   },
   "NetworkTables": {
