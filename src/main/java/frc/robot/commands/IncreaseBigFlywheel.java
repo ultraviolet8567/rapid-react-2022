@@ -2,14 +2,11 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.Shooter;
+
 
 public class IncreaseBigFlywheel extends CommandBase {
-    private final Shooter m_shooter;
     
-    public IncreaseBigFlywheel(Shooter subsystem) {
-        m_shooter = subsystem;
-        addRequirements(m_shooter);
+    public IncreaseBigFlywheel() {
     }
 
     // Called when the command is initially scheduled.
