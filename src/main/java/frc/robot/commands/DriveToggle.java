@@ -3,8 +3,8 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
-public class DriveToggle extends CommandBase {
 
+public class DriveToggle extends CommandBase {
     private final Drivetrain m_drivetrain;
 
     public DriveToggle(Drivetrain subsystem) {

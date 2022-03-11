@@ -1,17 +1,12 @@
-// ROBOTBUILDER TYPE: Robot.
-
 package frc.robot;
 
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
-
-import com.revrobotics.CANSparkMax.ControlType;
-
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.Shooter;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,7 +18,6 @@ import frc.robot.subsystems.Shooter;
 public class Robot extends TimedRobot {
 
     private Command m_autonomousCommand;
-
     private RobotContainer m_robotContainer;
 
     /**
@@ -32,7 +26,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
+        // Instantiate our RobotContainer. This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
         m_robotContainer = RobotContainer.getInstance();
         HAL.report(tResourceType.kResourceType_Framework, tInstances.kFramework_RobotBuilder);
@@ -42,7 +36,7 @@ public class Robot extends TimedRobot {
     * This function is called every robot packet, no matter the mode. Use this for items like
     * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
     *
-    * <p>This runs after the mode specific periodic functions, but before
+    * This runs after the mode specific periodic functions, but before
     * LiveWindow and SmartDashboard integrated updating.
     */
     @Override
@@ -55,9 +49,7 @@ public class Robot extends TimedRobot {
     }
 
 
-    /**
-    * This function is called once each time the robot enters Disabled mode.
-    */
+    // This function is called once each time the robot enters Disabled mode
     @Override
     public void disabledInit() {
     }
@@ -66,9 +58,7 @@ public class Robot extends TimedRobot {
     public void disabledPeriodic() {
     }
 
-    /**
-    * This autonomous runs the autonomous command selected by your {@link RobotContainer} class.
-    */
+    // This autonomous runs the autonomous command selected by your {@link RobotContainer} class
     @Override
     public void autonomousInit() {
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
@@ -79,9 +69,7 @@ public class Robot extends TimedRobot {
         }
     }
 
-    /**
-    * This function is called periodically during autonomous.
-    */
+    // This function is called periodically during autonomous
     @Override
     public void autonomousPeriodic() {
     }
@@ -97,22 +85,18 @@ public class Robot extends TimedRobot {
         }
     }
 
-    /**
-     * This function is called periodically during operator control.
-     */
+    // This function is called periodically during operator control
     @Override
     public void teleopPeriodic() {
     }
 
     @Override
     public void testInit() {
-        // Cancels all running commands at the start of test mode.
+        // Cancels all running commands at the start of test mode
         CommandScheduler.getInstance().cancelAll();
     }
 
-    /**
-    * This function is called periodically during test mode.
-    */
+    // This function is called periodically during test mode
     @Override
     public void testPeriodic() {
     }
