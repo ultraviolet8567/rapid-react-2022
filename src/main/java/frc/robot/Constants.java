@@ -10,19 +10,10 @@ constants are needed, to reduce verbosity.
 */
 
 public class Constants {
-    /*
-    public static final class DriveConstants {
-        public static final int kLeftMotor1Port = 0;
-        public static final int kLeftMotor2Port = 1;
-        public static final int kRightMotor1Port = 2;
-        public static final int kRightMotor2Port = 3; 
-    } 
-    */
-
-    public static double intakeSpeed = 10000;
+    public static double intakeSpeed = 14500;
     public static double conveyorSpeed = 10000;
     public static double hangerSpeed = 2700;
     public static double bigFlywheelSpeed = 10000;
-    public static double smallFlywheelSpeed = 10000;
+    public static double smallFlywheelSpeed = 12500;
 }
 

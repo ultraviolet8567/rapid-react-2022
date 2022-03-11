@@ -27,22 +27,22 @@ public class Drive extends CommandBase {
         if (m_drivetrain.isSingleStickDrive()) {
             if (Math.abs(xbox.getLeftY()) > 0.1 || Math.abs(-xbox.getLeftX()) > 0.1) {
                 // Normal single stick drive
-                m_drivetrain.getDifferentialDrive().tankDrive(
-                    xbox.getLeftY(),
-                    -xbox.getLeftX());
+                m_drivetrain.getDifferentialDrive().arcadeDrive(
+                    -xbox.getLeftX(),
+                    xbox.getLeftY());
             }
             else {
                 // Fine-tuning single stick drive
                 m_drivetrain.getDifferentialDrive().arcadeDrive(
-                    xbox.getRightY() / Math.sqrt(2),
-                    -xbox.getRightX() / Math.sqrt(2));
+                    -xbox.getRightX() / Math.sqrt(2),
+                    xbox.getRightY() / Math.sqrt(2));
             }
         }
         else {
             // Split control drive
             m_drivetrain.getDifferentialDrive().arcadeDrive(
-                xbox.getLeftY(),
-                -xbox.getRightX());
+                -xbox.getLeftY(),
+                xbox.getRightX());
         }
     }
 

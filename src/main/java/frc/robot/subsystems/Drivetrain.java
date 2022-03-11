@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+
 public class Drivetrain extends SubsystemBase {
     private CANSparkMax leftFront;
     private CANSparkMax leftBack;
@@ -20,21 +21,18 @@ public class Drivetrain extends SubsystemBase {
     private boolean singleStickOperation = true;
 
     public Drivetrain() {
-        leftFront = new CANSparkMax(4, MotorType.kBrushless);
+        leftFront = new CANSparkMax(3, MotorType.kBrushless);
         leftFront.setInverted(true);
-
-        leftBack = new CANSparkMax(3, MotorType.kBrushless);
-        leftBack.setInverted(true);
-
-        rightFront = new CANSparkMax(1, MotorType.kBrushless);
-        rightFront.setInverted(false);
-
-        rightBack = new CANSparkMax(2, MotorType.kBrushless);
-        rightBack.setInverted(false);
-
         leftFront.restoreFactoryDefaults();
+
+        leftBack = new CANSparkMax(5, MotorType.kBrushless);
+        leftBack.setInverted(true);
         leftBack.restoreFactoryDefaults();
+
+        rightFront = new CANSparkMax(4, MotorType.kBrushless);
         rightFront.restoreFactoryDefaults();
+
+        rightBack = new CANSparkMax(6, MotorType.kBrushless);
         rightBack.restoreFactoryDefaults();
 
         leftGroup = new MotorControllerGroup(leftFront, leftBack);
@@ -49,12 +47,11 @@ public class Drivetrain extends SubsystemBase {
     // This method will be called once per scheduler run
     @Override
     public void periodic() { 
-        SmartDashboard.putData("Drivetrain/Differential Drive", differentialDrive);
-        SmartDashboard.putNumber("Drivetrain/Motor Speed: Left Front", leftFront.get());
-        SmartDashboard.putNumber("Drivetrain/Motor Speed: Right Front", rightFront.get());
-        SmartDashboard.putNumber("Drivetrain/Motor Speed: Left Back", leftBack.get());
-        SmartDashboard.putNumber("Drivetrain/Motor Speed: Right Back", rightBack.get());
-        SmartDashboard.putString("Drivetrain/Drive Setting", singleStickOperation ? "Single Stick" : "Split Control");
+        SmartDashboard.putNumber("Left front motor speed", leftFront.getEncoder().getVelocity());
+        SmartDashboard.putNumber("Right front motor speed", rightFront.getEncoder().getVelocity());
+        SmartDashboard.putNumber("Left back motor speed", leftBack.getEncoder().getVelocity());
+        SmartDashboard.putNumber("Right back motor speed", rightBack.getEncoder().getVelocity());
+        SmartDashboard.putString("Drive setting", singleStickOperation ? "Single Stick" : "Split Control");
     }
 
     // This method will be called once per scheduler run when in simulation

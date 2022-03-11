@@ -4,10 +4,12 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxPIDController;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+
 
 public class Shooter extends SubsystemBase {
 
@@ -15,11 +17,8 @@ public class Shooter extends SubsystemBase {
     private CANSparkMax smallFlywheel;
 
     public Shooter() {
-        bigFlywheel = new CANSparkMax(4, MotorType.kBrushless);
-        bigFlywheel.setInverted(false);
-
-        smallFlywheel = new CANSparkMax(10, MotorType.kBrushless);
-        smallFlywheel.setInverted(false);
+        bigFlywheel = new CANSparkMax(1, MotorType.kBrushless);
+        smallFlywheel = new CANSparkMax(2, MotorType.kBrushless);
     }
 
     // This method will be called once per scheduler run

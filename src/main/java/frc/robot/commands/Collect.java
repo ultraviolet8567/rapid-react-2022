@@ -1,10 +1,11 @@
-// ROBOTBUILDER TYPE: Command.
-
 package frc.robot.commands;
+
 import com.revrobotics.CANSparkMax.ControlType;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Collection;
+
 
 public class Collect extends CommandBase {
     private final Collection m_collection;
@@ -19,7 +20,7 @@ public class Collect extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        if (!m_collection.ballTop()) { m_collection.runConveyor(Constants.intakeSpeed, ControlType.kVelocity); }
+        if (!m_collection.ballTop()) { m_collection.runConveyor(Constants.conveyorSpeed, ControlType.kVelocity); }
         if (!m_collection.ballBottom()) { m_collection.runIntake(Constants.intakeSpeed, ControlType.kVelocity); }
     }
 
