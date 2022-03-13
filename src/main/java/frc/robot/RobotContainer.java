@@ -94,16 +94,16 @@ public class RobotContainer {
         aButton.whileHeld(new RetractHanger(m_hanger), true);
 
         final POVButton up = new POVButton(xboxController, 0);
-        up.whileHeld(new IncreaseBigFlywheel(), true);
+        up.whileHeld(new IncreaseV(), true);
 
         final POVButton down = new POVButton(xboxController, 180);
-        down.whileHeld(new DecreaseBigFlywheel(), true);
+        down.whileHeld(new DecreaseV(), true);
 
         final POVButton left = new POVButton(xboxController, 270);
-        left.whileHeld(new DecreaseSmallFlywheel(), true);
+        left.whileHeld(new DecreaseH(), true);
 
         final POVButton right = new POVButton(xboxController, 90);
-        right.whileHeld(new IncreaseSmallFlywheel(), true);
+        right.whileHeld(new IncreaseH(), true);
 
         final JoystickButton buttonX = new JoystickButton(xboxController, XboxController.Button.kX.value);
         buttonX.whenPressed(new ShootFender(m_shooter), true);

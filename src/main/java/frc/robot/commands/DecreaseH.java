@@ -4,9 +4,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 
 
-public class IncreaseBigFlywheel extends CommandBase {
+public class DecreaseH extends CommandBase {
     
-    public IncreaseBigFlywheel() {
+    public DecreaseH() {
     }
 
     // Called when the command is initially scheduled.
@@ -17,7 +17,7 @@ public class IncreaseBigFlywheel extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        Constants.bigFlywheelSpeed += 1;
+        Constants.smallFlywheelSpeed -= 1;
     }
 
     // Called once the command ends or is interrupted.
