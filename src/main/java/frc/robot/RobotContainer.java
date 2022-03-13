@@ -57,7 +57,7 @@ public class RobotContainer {
 
         // Configure default commands
         m_drivetrain.setDefaultCommand(new Drive(m_drivetrain));
-        m_shooter.setDefaultCommand(new RunFlywheel(m_shooter));
+        // m_shooter.setDefaultCommand(new RunFlywheel(m_shooter));
         
         // Configure autonomous sendable chooser
         m_chooser.setDefaultOption("Drive out auto", new AutoDriveOut());
@@ -85,7 +85,7 @@ public class RobotContainer {
         rightBumper.toggleWhenPressed(new Collect(m_collection), true);
 
         final JoystickButton leftBumper = new JoystickButton(xboxController, XboxController.Button.kLeftBumper.value);        
-        leftBumper.toggleWhenPressed(new Shoot(m_collection), true);
+        leftBumper.toggleWhenPressed(new Shoot(m_shooter, m_collection), true);
 
         final JoystickButton yButton = new JoystickButton(xboxController, XboxController.Button.kY.value);        
         yButton.whileHeld(new ExtendHanger(m_hanger), true);

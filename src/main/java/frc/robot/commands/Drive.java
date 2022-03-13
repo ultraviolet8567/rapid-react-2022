@@ -41,8 +41,8 @@ public class Drive extends CommandBase {
         else {
             // Split control drive
             m_drivetrain.getDifferentialDrive().arcadeDrive(
-                -xbox.getLeftY(),
-                xbox.getRightX());
+                xbox.getRightX()/2, 
+                xbox.getLeftY()/2);
         }
     }
 

@@ -10,10 +10,13 @@ import frc.robot.subsystems.Shooter;
 
 public class Shoot extends CommandBase {
     private final Collection m_collection;
+    private final Shooter m_shooter;
     
-    public Shoot(Collection subsystem) {
-        m_collection = subsystem;
+    public Shoot(Shooter shooter, Collection collection) {
+        m_collection = collection;
+        m_shooter = shooter;
         addRequirements(m_collection);
+        addRequirements(m_shooter);
     }
 
     // Called when the command is initially scheduled.
@@ -31,8 +34,8 @@ public class Shoot extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        Shooter.runBigFlywheel(0, ControlType.kVelocity);
-        Shooter.runSmallFlywheel(0, ControlType.kVelocity);
+        m_shooter.runBigFlywheel(0, ControlType.kVelocity);
+        m_shooter.runSmallFlywheel(0, ControlType.kVelocity);
         m_collection.runConveyor(0, ControlType.kVelocity);
     }
 
