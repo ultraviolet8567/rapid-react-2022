@@ -13,8 +13,8 @@ import frc.robot.RobotContainer;
 
 public class Shooter extends SubsystemBase {
 
-    private CANSparkMax bigFlywheel;
-    private CANSparkMax smallFlywheel;
+    private static CANSparkMax bigFlywheel;
+    private static CANSparkMax smallFlywheel;
 
     public Shooter() {
         bigFlywheel = new CANSparkMax(1, MotorType.kBrushless);
@@ -39,14 +39,14 @@ public class Shooter extends SubsystemBase {
 
     // Sets a parameter (type) of shooterMC1(? no idea what that stands for) to the given value (setPoint)
     // e.g. possible parameters are ControlType.kDutyCycle, ControlType.kPosition, ControlType.kVelocity, and ControlType.kVoltage
-    public void runBigFlywheel(double setPoint, ControlType type) {
+    public static void runBigFlywheel(double setPoint, ControlType type) {
         SparkMaxPIDController pid_controller = RobotContainer.getDefaultPIDController(bigFlywheel);
         pid_controller.setReference(setPoint, type);
     }
 
     // Sets a parameter (type) of shooterMC2(again, no idea) to the given value (setPoint)
     // e.g. possible parameters are ControlType.kDutyCycle, ControlType.kPosition, ControlType.kVelocity, and ControlType.kVoltage
-    public void runSmallFlywheel(double setPoint, ControlType type) {
+    public static void runSmallFlywheel(double setPoint, ControlType type) {
         SparkMaxPIDController pid_controller = RobotContainer.getDefaultPIDController(smallFlywheel);
         pid_controller.setReference(setPoint, type);
     }

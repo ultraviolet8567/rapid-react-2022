@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMax.ControlType;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Collection;
+import frc.robot.subsystems.Shooter;
 
 
 public class Shoot extends CommandBase {
@@ -30,6 +31,8 @@ public class Shoot extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
+        Shooter.runBigFlywheel(0, ControlType.kVelocity);
+        Shooter.runSmallFlywheel(0, ControlType.kVelocity);
         m_collection.runConveyor(0, ControlType.kVelocity);
     }
 

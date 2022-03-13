@@ -15,5 +15,9 @@ public class Constants {
     public static double hangerSpeed = 2700;
     public static double bigFlywheelSpeed = 10000;
     public static double smallFlywheelSpeed = 12500;
+    public static double fenderSpeedSmall = 11000;
+    public static double fenderSpeedBig = 11000;
+    public static double distanceSpeedSmall = 11000;
+    public static double distanceSpeedBig = 11000;
 }
 
