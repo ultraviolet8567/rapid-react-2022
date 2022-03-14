@@ -1,13 +1,23 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Collection;
+import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Shooter;
 
 
 public class AutoTwoBall extends CommandBase {
+    private Drivetrain m_drivetrain;
+    private Collection m_collection;
+    private Shooter m_shooter;
 
-    public AutoTwoBall() {
-        // m_subsystem = subsystem;
-        // addRequirements(m_subsystem);    
+    public AutoTwoBall(Drivetrain drivetrain, Collection collection, Shooter shooter) {
+        m_drivetrain = drivetrain;
+        m_collection = collection;
+        m_shooter = shooter;
+        addRequirements(m_drivetrain);    
+        addRequirements(m_collection);    
+        addRequirements(m_shooter);    
     }
 
     // Called when the command is initially scheduled.

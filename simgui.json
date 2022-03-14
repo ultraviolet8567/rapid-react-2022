@@ -24,6 +24,8 @@
       "/LiveWindow/Storage": "Subsystem",
       "/LiveWindow/Storage/StorageMC": "Motor Controller",
       "/LiveWindow/Ungrouped/DifferentialDrive[1]": "DifferentialDrive",
+      "/LiveWindow/Ungrouped/DigitalInput[0]": "Digital Input",
+      "/LiveWindow/Ungrouped/DigitalInput[1]": "Digital Input",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
       "/SmartDashboard/Auto Mode": "String Chooser",
       "/SmartDashboard/Auto choices": "String Chooser",

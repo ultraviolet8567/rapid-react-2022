@@ -11,7 +11,6 @@ public class ExtendHanger extends CommandBase {
     private final Hanger m_hanger;
 
     public ExtendHanger(Hanger subsystem) {
-
         m_hanger = subsystem;
         addRequirements(m_hanger);
     }
