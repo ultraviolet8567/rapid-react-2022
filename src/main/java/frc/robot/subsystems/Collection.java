@@ -35,8 +35,6 @@ public class Collection extends SubsystemBase {
         SmartDashboard.putNumber("Conveyor velocity", conveyor.getEncoder().getVelocity());
         SmartDashboard.putBoolean("Detected - Top ball", ballTop());
         SmartDashboard.putBoolean("Detected - Bottom ball", ballBottom());
-        SmartDashboard.putData("Top Detector", detectorTop);
-        SmartDashboard.putData("Bottom Detector", detectorBottom);
         SmartDashboard.putNumber("Ball count", (ballTop() ? 1 : 0) + (ballBottom() ? 1 : 0));
     }
 

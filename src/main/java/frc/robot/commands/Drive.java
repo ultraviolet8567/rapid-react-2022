@@ -80,13 +80,13 @@ public class Drive extends CommandBase {
                 value = filterLX.calculate(xbox.getLeftX() * multiplier);
                 break;
             case "LeftY":
-            value = filterLY.calculate(xbox.getLeftY() * multiplier);
+                value = filterLY.calculate(xbox.getLeftY() * multiplier);
                 break;
             case "RightX":
-            value = filterRX.calculate(xbox.getRightX() * multiplier);
+                value = filterRX.calculate(xbox.getRightX() * multiplier);
                 break;
             case "RightY":
-            value = filterRY.calculate(xbox.getRightY() * multiplier);
+                value = filterRY.calculate(xbox.getRightY() * multiplier);
                 break;
             default:
                 value = 0;

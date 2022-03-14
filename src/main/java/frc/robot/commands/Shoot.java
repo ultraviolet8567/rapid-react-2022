@@ -22,7 +22,6 @@ public class Shoot extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        // shooter.runShooter1(Constants.shooter1Speed, ControlType.kVelocity);
         m_collection.runConveyor(Constants.conveyorSpeed, ControlType.kVelocity);
     }
 

@@ -30,6 +30,8 @@ public class ShootLowerHub extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
+        m_shooter.runBigFlywheel(0, ControlType.kVelocity);
+        m_shooter.runSmallFlywheel(0, ControlType.kVelocity);
     }
 
     // Returns true when the command should end.
@@ -42,4 +44,5 @@ public class ShootLowerHub extends CommandBase {
     public boolean runsWhenDisabled() {
         return false;
     }
+    
 }

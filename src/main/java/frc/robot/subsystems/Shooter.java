@@ -26,12 +26,12 @@ public class Shooter extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("Big flywheel speed", bigFlywheel.getEncoder().getVelocity());
         SmartDashboard.putNumber("Small flywheel speed", smallFlywheel.getEncoder().getVelocity());
-        SmartDashboard.putNumber("Big flywheel low hub set speed", Constants.hubBigSpeed);
-        SmartDashboard.putNumber("Small flywheel low hub set speed", Constants.hubSmallSpeed);
-        SmartDashboard.putNumber("Big flywheel fender set speed", Constants.fenderBigSpeed);
-        SmartDashboard.putNumber("Small flywheel fender set speed", Constants.fenderSmallSpeed);
-        SmartDashboard.putNumber("Big flywheel distance set speed", Constants.distanceBigSpeed);
-        SmartDashboard.putNumber("Small flywheel distance set speed", Constants.distanceSmallSpeed);
+        SmartDashboard.putNumber("Big flywheel set speed (low hub)", Constants.hubBigSpeed);
+        SmartDashboard.putNumber("Small flywheel set speed (low hub)", Constants.hubSmallSpeed);
+        SmartDashboard.putNumber("Big flywheel set speed (fender)", Constants.fenderBigSpeed);
+        SmartDashboard.putNumber("Small flywheel set speed (fender)", Constants.fenderSmallSpeed);
+        SmartDashboard.putNumber("Big flywheel set speed (distance)", Constants.distanceBigSpeed);
+        SmartDashboard.putNumber("Small flywheel set speed (distance)", Constants.distanceSmallSpeed);
     }
 
     // This method will be called once per scheduler run when in simulation
@@ -41,14 +41,14 @@ public class Shooter extends SubsystemBase {
 
     // Put methods for controlling this subsystem here. Call these from Commands.
 
-    // Sets a parameter (type) of shooterMC1(? no idea what that stands for) to the given value (setPoint)
+    // Sets a parameter (type) of the big flywheel to the given value (setPoint)
     // e.g. possible parameters are ControlType.kDutyCycle, ControlType.kPosition, ControlType.kVelocity, and ControlType.kVoltage
     public void runBigFlywheel(double setPoint, ControlType type) {
         SparkMaxPIDController pid_controller = RobotContainer.getDefaultPIDController(bigFlywheel);
         pid_controller.setReference(setPoint, type);
     }
 
-    // Sets a parameter (type) of shooterMC2(again, no idea) to the given value (setPoint)
+    // Sets a parameter (type) of the big flywheel to the given value (setPoint)
     // e.g. possible parameters are ControlType.kDutyCycle, ControlType.kPosition, ControlType.kVelocity, and ControlType.kVoltage
     public void runSmallFlywheel(double setPoint, ControlType type) {
         SparkMaxPIDController pid_controller = RobotContainer.getDefaultPIDController(smallFlywheel);
