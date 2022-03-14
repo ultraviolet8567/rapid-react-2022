@@ -26,8 +26,12 @@ public class Shooter extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("Big flywheel speed", bigFlywheel.getEncoder().getVelocity());
         SmartDashboard.putNumber("Small flywheel speed", smallFlywheel.getEncoder().getVelocity());
-        SmartDashboard.putNumber("Big flywheel set speed", Constants.bigFlywheelSpeed);
-        SmartDashboard.putNumber("Small flywheel set speed", Constants.smallFlywheelSpeed);
+        SmartDashboard.putNumber("Big flywheel low hub set speed", Constants.hubBigSpeed);
+        SmartDashboard.putNumber("Small flywheel low hub set speed", Constants.hubSmallSpeed);
+        SmartDashboard.putNumber("Big flywheel fender set speed", Constants.fenderBigSpeed);
+        SmartDashboard.putNumber("Small flywheel fender set speed", Constants.fenderSmallSpeed);
+        SmartDashboard.putNumber("Big flywheel distance set speed", Constants.distanceBigSpeed);
+        SmartDashboard.putNumber("Small flywheel distance set speed", Constants.distanceSmallSpeed);
     }
 
     // This method will be called once per scheduler run when in simulation

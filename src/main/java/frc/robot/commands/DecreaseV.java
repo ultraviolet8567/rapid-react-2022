@@ -17,7 +17,7 @@ public class DecreaseV extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        Constants.bigFlywheelSpeed -= 1;
+        Constants.fenderBigSpeed -= 1;
     }
 
     // Called once the command ends or is interrupted.

@@ -57,12 +57,13 @@ public class RobotContainer {
 
         // Configure default commands
         m_drivetrain.setDefaultCommand(new Drive(m_drivetrain));
-        // m_shooter.setDefaultCommand(new RunFlywheel(m_shooter));
+        m_shooter.setDefaultCommand(new ShootLowerHub(m_shooter));
         
         // Configure autonomous sendable chooser
-        m_chooser.setDefaultOption("Drive out auto", new AutoDriveOut());
-        m_chooser.addOption("One ball auto", new AutoOneBall());
-        
+        m_chooser.addOption("Drive out auto", new AutoDriveOut(m_drivetrain));
+        m_chooser.setDefaultOption("One ball auto", new AutoOneBall(m_drivetrain, m_collection, m_shooter));
+        m_chooser.addOption("Two ball auto", new AutoTwoBall(m_drivetrain, m_collection, m_shooter));
+
         SmartDashboard.putData("Auto Mode", m_chooser);
     }
 

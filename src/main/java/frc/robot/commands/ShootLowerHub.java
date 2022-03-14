@@ -7,10 +7,10 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Shooter;
 
 
-public class RunFlywheel extends CommandBase {
+public class ShootLowerHub extends CommandBase {
     private final Shooter m_shooter;
     
-    public RunFlywheel(Shooter subsystem) {
+    public ShootLowerHub(Shooter subsystem) {
         m_shooter = subsystem;
         addRequirements(m_shooter);
     }
@@ -23,8 +23,8 @@ public class RunFlywheel extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_shooter.runBigFlywheel(Constants.bigFlywheelSpeed, ControlType.kVelocity);
-        m_shooter.runSmallFlywheel(Constants.smallFlywheelSpeed, ControlType.kVelocity);
+        m_shooter.runBigFlywheel(Constants.hubBigSpeed, ControlType.kVelocity);
+        m_shooter.runSmallFlywheel(Constants.hubSmallSpeed, ControlType.kVelocity);
     }
 
     // Called once the command ends or is interrupted.
