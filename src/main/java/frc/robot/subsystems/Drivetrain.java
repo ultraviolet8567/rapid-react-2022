@@ -22,22 +22,15 @@ public class Drivetrain extends SubsystemBase {
 
     public Drivetrain() {
         leftFront = new CANSparkMax(3, MotorType.kBrushless);
-        leftFront.setInverted(true);
-        leftFront.restoreFactoryDefaults();
-
         leftBack = new CANSparkMax(5, MotorType.kBrushless);
-        leftBack.setInverted(true);
-        leftBack.restoreFactoryDefaults();
 
         rightFront = new CANSparkMax(4, MotorType.kBrushless);
-        rightFront.restoreFactoryDefaults();
-
         rightBack = new CANSparkMax(6, MotorType.kBrushless);
-        rightBack.restoreFactoryDefaults();
 
         leftGroup = new MotorControllerGroup(leftFront, leftBack);
         rightGroup = new MotorControllerGroup(rightFront, rightBack);
-        
+        rightGroup.setInverted(true);
+
         differentialDrive = new DifferentialDrive(leftGroup, rightGroup);
         differentialDrive.setSafetyEnabled(true);
         differentialDrive.setExpiration(0.1);
@@ -46,11 +39,11 @@ public class Drivetrain extends SubsystemBase {
 
     // This method will be called once per scheduler run
     @Override
-    public void periodic() { 
-        SmartDashboard.putNumber("Left front motor speed", leftFront.getEncoder().getVelocity());
-        SmartDashboard.putNumber("Right front motor speed", rightFront.getEncoder().getVelocity());
-        SmartDashboard.putNumber("Left back motor speed", leftBack.getEncoder().getVelocity());
-        SmartDashboard.putNumber("Right back motor speed", rightBack.getEncoder().getVelocity());
+    public void periodic() {
+        SmartDashboard.putNumber("Left front motor speed", leftFront.get()); //Encoder().getVelocity());
+        SmartDashboard.putNumber("Right front motor speed", rightFront.get()); //Encoder().getVelocity());
+        SmartDashboard.putNumber("Left back motor speed", leftBack.get()); //Encoder().getVelocity());
+        SmartDashboard.putNumber("Right back motor speed", rightBack.get()); //Encoder().getVelocity());
         SmartDashboard.putString("Drive setting", singleStickOperation ? "Single Stick" : "Split Control");
     }
 
@@ -60,6 +53,13 @@ public class Drivetrain extends SubsystemBase {
     }
 
     // Put methods for controlling this subsystem here. Call these from Commands.   
+    public void stopMotors() {
+        leftFront.stopMotor();
+        leftBack.stopMotor();
+        rightFront.stopMotor();
+        rightBack.stopMotor();
+    }
+
     public DifferentialDrive getDifferentialDrive() {
         return differentialDrive;
     }
