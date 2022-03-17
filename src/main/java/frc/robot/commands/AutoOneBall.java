@@ -1,8 +1,13 @@
 package frc.robot.commands;
 
+import java.util.Map;
+
 import com.revrobotics.CANSparkMax.ControlType;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
@@ -17,20 +22,26 @@ public class AutoOneBall extends CommandBase {
     private Shooter m_shooter;
     private Timer timer;
 
+    private NetworkTableEntry stopwatch;
+
     public AutoOneBall(Drivetrain drivetrain, Collection collection, Shooter shooter) {
         m_drivetrain = drivetrain;
         m_collection = collection;
         m_shooter = shooter;
         addRequirements(m_drivetrain);    
         addRequirements(m_collection);    
-        addRequirements(m_shooter);    
+        addRequirements(m_shooter);
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
         timer = new Timer();
-        timer.start();
+        timer.start(); 
+
+        stopwatch = Shuffleboard.getTab("Auto").add("Stopwatch", timer.get()).withWidget(BuiltInWidgets.kDial)
+            .withProperties(Map.of("min", 0, "max", 15, "show value", true))
+            .getEntry();
 
         m_shooter.runBigFlywheel(Constants.fenderBigSpeed, ControlType.kVelocity);
         m_shooter.runSmallFlywheel(Constants.fenderSmallSpeed, ControlType.kVelocity);
@@ -39,12 +50,12 @@ public class AutoOneBall extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        SmartDashboard.putNumber("Stopwatch", timer.get());
+        stopwatch.setNumber(timer.get());
 
-        if (timer.get() > 10) {
+        if (timer.get() > 5) {
             m_collection.runConveyor(Constants.conveyorSpeed, ControlType.kVelocity);
         }
-        if (timer.get() > 15) {
+        if (timer.get() > 10) {
             m_drivetrain.getDifferentialDrive().arcadeDrive(0.5, 0);
         }
     }
@@ -63,7 +74,7 @@ public class AutoOneBall extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return (timer.get() > 25);
+        return (timer.get() > 15);
     }
 
     @Override
