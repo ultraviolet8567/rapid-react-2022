@@ -1,12 +1,18 @@
 package frc.robot.subsystems;
 
+import java.util.Map;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxPIDController;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 
@@ -18,6 +24,11 @@ public class Collection extends SubsystemBase {
     private DigitalInput detectorTop;
     private DigitalInput detectorBottom;
 
+    private NetworkTableEntry intakeVelocity;
+    private NetworkTableEntry conveyorVelocity;
+    private NetworkTableEntry detectedTop;
+    private NetworkTableEntry detectedBottom;
+
     public Collection() {
         intake = new CANSparkMax(7, MotorType.kBrushless);
         intake.setInverted(true);
@@ -26,16 +37,28 @@ public class Collection extends SubsystemBase {
 
         detectorTop = new DigitalInput(0);
         detectorBottom = new DigitalInput(1);
+
+        intakeVelocity = Shuffleboard.getTab("Collection").add("Intake", intake.getEncoder().getVelocity()).withWidget(BuiltInWidgets.kGraph)
+            .withProperties(Map.of("lower bound", -0.5, "upper bound", 15.5, "automatic bounds", false, "unit", "RPM"))
+            .withPosition(0, 0)
+            .getEntry();
+        conveyorVelocity = Shuffleboard.getTab("Collection").add("Conveyor", conveyor.getEncoder().getVelocity()).withWidget(BuiltInWidgets.kGraph)
+            .withProperties(Map.of("lower bound", -0.5, "upper bound", 15.5, "automatic bounds", false, "unit", "RPM"))
+            .withPosition(3, 0)
+            .getEntry();
+
+        ShuffleboardLayout sensors = Shuffleboard.getTab("Collection").getLayout("Sensors", BuiltInLayouts.kList).withSize(2, 2);
+        detectedTop = sensors.add("Top ball", ballTop()).withWidget(BuiltInWidgets.kBooleanBox).withProperties(Map.of("send to top", true)).getEntry();
+        detectedBottom = sensors.add("Bottom ball", ballBottom()).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
     }
 
     // This method will be called once per scheduler run
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Intake velocity", intake.getEncoder().getVelocity());
-        SmartDashboard.putNumber("Conveyor velocity", conveyor.getEncoder().getVelocity());
-        SmartDashboard.putBoolean("Detected - Top ball", ballTop());
-        SmartDashboard.putBoolean("Detected - Bottom ball", ballBottom());
-        SmartDashboard.putNumber("Ball count", (ballTop() ? 1 : 0) + (ballBottom() ? 1 : 0));
+        intakeVelocity.setNumber(intake.getEncoder().getVelocity() / 1000);
+        conveyorVelocity.setNumber(conveyor.getEncoder().getVelocity() / 1000);
+        detectedTop.setBoolean(ballTop());
+        detectedBottom.setBoolean(ballBottom());
     }
 
     // This method will be called once per scheduler run when in simulation

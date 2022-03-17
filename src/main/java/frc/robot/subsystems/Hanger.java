@@ -1,11 +1,15 @@
 package frc.robot.subsystems;
 
+import java.util.Map;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxPIDController;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 
@@ -15,16 +19,26 @@ public class Hanger extends SubsystemBase {
     private CANSparkMax left;
     private CANSparkMax right;
 
+    private NetworkTableEntry leftVelocity;
+    private NetworkTableEntry rightVelocity;
+
     public Hanger() {
         left = new CANSparkMax(9, MotorType.kBrushless);
         right = new CANSparkMax(10, MotorType.kBrushless);
+
+        leftVelocity = Shuffleboard.getTab("Hanger").add("Left hanger", left.getEncoder().getVelocity()).withWidget(BuiltInWidgets.kGraph)
+            .withProperties(Map.of("lower bound", -0.5, "upper bound", 10.5, "automatic bounds", false, "unit", "RPM"))
+            .getEntry();
+        rightVelocity = Shuffleboard.getTab("Hanger").add("Right hanger", right.getEncoder().getVelocity()).withWidget(BuiltInWidgets.kGraph)
+            .withProperties(Map.of("lower bound", -0.5, "upper bound", 10.5, "automatic bounds", false, "unit", "RPM"))
+            .getEntry();
     }
 
     // This method will be called once per scheduler run
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Left hanger velocity", left.getEncoder().getVelocity());
-        SmartDashboard.putNumber("Right hanger velocity", right.getEncoder().getVelocity());
+        leftVelocity.setNumber(left.getEncoder().getVelocity() / 1000);
+        rightVelocity.setNumber(right.getEncoder().getVelocity() / 1000);
     }
 
     // This method will be called once per scheduler run when in simulation

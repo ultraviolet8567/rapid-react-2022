@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.util.Map;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
 
@@ -7,10 +9,10 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -25,10 +27,17 @@ import frc.robot.subsystems.*;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-
     private static RobotContainer m_robotContainer = new RobotContainer();
 
-    // The robot's subsystems
+    // Shuffleboard tabs
+    public final ShuffleboardTab driveSettings = Shuffleboard.getTab("Drive Settings");
+    public final ShuffleboardTab cameraTab = Shuffleboard.getTab("Camera");
+    public final ShuffleboardTab autoTab = Shuffleboard.getTab("Auto");
+    public final ShuffleboardTab collectionTab = Shuffleboard.getTab("Collection");
+    public final ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
+    public final ShuffleboardTab hangerTab = Shuffleboard.getTab("Hanger");
+
+    // Subsystems
     public final Shooter m_shooter = new Shooter();
     public final Drivetrain m_drivetrain = new Drivetrain();
     public final Collection m_collection = new Collection();
@@ -37,31 +46,15 @@ public class RobotContainer {
     // Joysticks
     private final XboxController xboxController = new XboxController(0);
 
-    // A chooser for autonomous commands
-    SendableChooser<Command> m_chooser = new SendableChooser<>();
-
     // Cameras
-    public static ShuffleboardTab cameraTab = Shuffleboard.getTab("Camera");
+    public UsbCamera frontCamera = CameraServer.startAutomaticCapture(0);
+    public UsbCamera backCamera = CameraServer.startAutomaticCapture(1);
 
-    public static UsbCamera frontCamera;
-    public static UsbCamera backCamera;
+    // Autonomous chooser
+    SendableChooser<Command> m_chooser = new SendableChooser<>();
 
     // The container for the robot.  Contains subsystems, OI devices, and commands
     private RobotContainer() {
-        // SmartDashboard Buttons
-        // SmartDashboard.putData("Commands/Drive Out Auto", new AutoDriveOut());
-        // SmartDashboard.putData("Commands/One Ball Auto", new AutoOneBall());
-        // SmartDashboard.putData("Commands/Drive", new Drive(m_drivetrain));
-        // SmartDashboard.putData("Commands/DriveToggle", new DriveToggle(m_drivetrain));
-        // SmartDashboard.putData("Commands/Collect", new Collect(m_collection));
-        // SmartDashboard.putData("Commands/Shoot", new Shoot(m_shooter));
-        // SmartDashboard.putData("Commands/ExtendHanger", new ExtendHanger(m_hanger));
-        // SmartDashboard.putData("Commands/RetractHanger", new RetractHanger(m_hanger));
-        // SmartDashboard.putData("Commands/FlywheelOneIncrease", new IncreaseBigFlywheel(m_shooter));
-        // SmartDashboard.putData("Commands/FlywheelOneDecrease", new DecreaseBigFlywheel(m_shooter));
-        // SmartDashboard.putData("Commands/FlywheelTwoIncrease", new IncreaseSmallFlywheel(m_shooter));
-        // SmartDashboard.putData("Commands/FlywheelTwoDecrease", new DecreaseSmallFlywheel(m_shooter));
-        
         // Configure the button bindings
         configureButtonBindings();
 
@@ -69,15 +62,18 @@ public class RobotContainer {
         m_drivetrain.setDefaultCommand(new Drive(m_drivetrain));
         m_shooter.setDefaultCommand(new ShootLowerHub(m_shooter));
         
-        // Configure autonomous sendable chooser
+        // Configure autonomous sendable chooser and send to Shuffleboard
         m_chooser.addOption("Drive out auto", new AutoDriveOut(m_drivetrain));
         m_chooser.setDefaultOption("One ball auto", new AutoOneBall(m_drivetrain, m_collection, m_shooter));
         m_chooser.addOption("Two ball auto", new AutoTwoBall(m_drivetrain, m_collection, m_shooter));
-
-        SmartDashboard.putData("Auto Mode", m_chooser);
-
-        frontCamera = CameraServer.startAutomaticCapture(0);
-        backCamera = CameraServer.startAutomaticCapture(1);
+        autoTab.add("Auto mode", m_chooser).withWidget(BuiltInWidgets.kComboBoxChooser)
+            .withSize(2, 1);
+        
+        // Send camera to ShuffleBoard
+        cameraTab.add("Front camera", frontCamera).withWidget(BuiltInWidgets.kCameraStream)
+            .withSize(5, 4);
+        cameraTab.add("Back camera", backCamera).withWidget(BuiltInWidgets.kCameraStream)
+            .withSize(5, 4);
     }
 
     /**
@@ -91,17 +87,26 @@ public class RobotContainer {
         final JoystickButton backButton = new JoystickButton(xboxController, XboxController.Button.kBack.value);
         backButton.whenPressed(new DriveToggle(m_drivetrain), true);
 
+        final JoystickButton startButton = new JoystickButton(xboxController, XboxController.Button.kStart.value);
+        startButton.toggleWhenPressed(new StopFlywheels(m_shooter), true);
+
         final JoystickButton rightBumper = new JoystickButton(xboxController, XboxController.Button.kRightBumper.value);        
         rightBumper.toggleWhenPressed(new Collect(m_collection), true);
 
         final JoystickButton leftBumper = new JoystickButton(xboxController, XboxController.Button.kLeftBumper.value);        
         leftBumper.toggleWhenPressed(new Shoot(m_shooter, m_collection), true);
 
-        final JoystickButton yButton = new JoystickButton(xboxController, XboxController.Button.kY.value);        
-        yButton.whileHeld(new ExtendHanger(m_hanger), true);
+        final JoystickButton buttonY = new JoystickButton(xboxController, XboxController.Button.kY.value);        
+        buttonY.whileHeld(new ExtendHanger(m_hanger), true);
 
-        final JoystickButton aButton = new JoystickButton(xboxController, XboxController.Button.kA.value);        
-        aButton.whileHeld(new RetractHanger(m_hanger), true);
+        final JoystickButton buttonA = new JoystickButton(xboxController, XboxController.Button.kA.value);        
+        buttonA.whileHeld(new RetractHanger(m_hanger), true);
+
+        final JoystickButton buttonX = new JoystickButton(xboxController, XboxController.Button.kX.value);
+        buttonX.whenPressed(new ShootFender(m_shooter), true);
+
+        final JoystickButton buttonB = new JoystickButton(xboxController, XboxController.Button.kB.value);
+        buttonB.whenPressed(new ShootDistance(m_shooter), true);
 
         final POVButton up = new POVButton(xboxController, 0);
         up.whileHeld(new IncreaseV(), true);
@@ -114,12 +119,6 @@ public class RobotContainer {
 
         final POVButton right = new POVButton(xboxController, 90);
         right.whileHeld(new IncreaseH(), true);
-
-        final JoystickButton buttonX = new JoystickButton(xboxController, XboxController.Button.kX.value);
-        buttonX.whenPressed(new ShootFender(m_shooter), true);
-
-        final JoystickButton buttonB = new JoystickButton(xboxController, XboxController.Button.kB.value);
-        buttonB.whenPressed(new ShootDistance(m_shooter), true);
     }
 
     public static RobotContainer getInstance() {
@@ -135,7 +134,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        // The selected command will be run in autonomous
         return m_chooser.getSelected();
     }
 

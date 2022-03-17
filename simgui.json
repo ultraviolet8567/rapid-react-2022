@@ -27,11 +27,16 @@
       "/LiveWindow/Ungrouped/DigitalInput[0]": "Digital Input",
       "/LiveWindow/Ungrouped/DigitalInput[1]": "Digital Input",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+      "/Shuffleboard/Auto/Auto mode": "String Chooser",
+      "/Shuffleboard/Drive Settings/Differential drive": "DifferentialDrive",
+      "/Shuffleboard/Drive Settings/Differential drive 1": "DifferentialDrive",
+      "/Shuffleboard/Drive Settings/Drive mode": "String Chooser",
       "/SmartDashboard/Auto Mode": "String Chooser",
       "/SmartDashboard/Auto choices": "String Chooser",
       "/SmartDashboard/Autonomous Command": "Command",
       "/SmartDashboard/BackButton": "Command",
       "/SmartDashboard/Bottom Detector": "Digital Input",
+      "/SmartDashboard/Bottom sensor": "Digital Input",
       "/SmartDashboard/ButtonA": "Command",
       "/SmartDashboard/Commands/Autonomous Command": "Command",
       "/SmartDashboard/Commands/Collect": "Command",
@@ -53,10 +58,14 @@
       "/SmartDashboard/RightBumper": "Command",
       "/SmartDashboard/Shoot": "Command",
       "/SmartDashboard/StartButton": "Command",
-      "/SmartDashboard/Top Detector": "Digital Input"
+      "/SmartDashboard/Top Detector": "Digital Input",
+      "/SmartDashboard/Top sensor": "Digital Input"
     }
   },
   "NetworkTables": {
+    "CameraPublisher": {
+      "open": true
+    },
     "LiveWindow": {
       "Collection": {
         "open": true

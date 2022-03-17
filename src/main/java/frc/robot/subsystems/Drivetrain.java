@@ -5,20 +5,22 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 public class Drivetrain extends SubsystemBase {
-    private CANSparkMax leftFront;
-    private CANSparkMax leftBack;
-    private CANSparkMax rightFront;
-    private CANSparkMax rightBack;
+    public CANSparkMax leftFront;
+    public CANSparkMax leftBack;
+    public CANSparkMax rightFront;
+    public CANSparkMax rightBack;
     private MotorControllerGroup leftGroup;
     private MotorControllerGroup rightGroup;
-    
     private DifferentialDrive differentialDrive;
-    private boolean singleStickOperation = true;
+
+    private SendableChooser<Boolean> driveMode = new SendableChooser<>();
 
     public Drivetrain() {
         leftFront = new CANSparkMax(3, MotorType.kBrushless);
@@ -35,16 +37,17 @@ public class Drivetrain extends SubsystemBase {
         differentialDrive.setSafetyEnabled(true);
         differentialDrive.setExpiration(0.1);
         differentialDrive.setMaxOutput(0.5);
+        
+        driveMode.setDefaultOption("Single stick", true);
+        driveMode.addOption("Split control", false);
+
+        Shuffleboard.getTab("Drive Settings").add("Drive mode", driveMode).withWidget(BuiltInWidgets.kComboBoxChooser).withSize(2, 1);
+        Shuffleboard.getTab("Drive Settings").add("Differential drive", differentialDrive).withWidget(BuiltInWidgets.kDifferentialDrive).withSize(4, 3);
     }
 
     // This method will be called once per scheduler run
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Left front motor speed", leftFront.getEncoder().getVelocity());
-        SmartDashboard.putNumber("Right front motor speed", rightFront.getEncoder().getVelocity());
-        SmartDashboard.putNumber("Left back motor speed", leftBack.getEncoder().getVelocity());
-        SmartDashboard.putNumber("Right back motor speed", rightBack.getEncoder().getVelocity());
-        SmartDashboard.putString("Drive setting", singleStickOperation ? "Single Stick" : "Split Control");
     }
 
     // This method will be called once per scheduler run when in simulation
@@ -65,10 +68,16 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public boolean isSingleStickDrive() {
-        return singleStickOperation;
+        return driveMode.getSelected();
     }
 
     public void toggleSingleStick() {
-        singleStickOperation = !singleStickOperation;
+        // Single-stick mode equates to true
+        if (driveMode.getSelected()) {
+            driveMode.setDefaultOption("Split control", false);
+        }
+        else {
+            driveMode.setDefaultOption("Single stick", true);
+        }
     }
 }
