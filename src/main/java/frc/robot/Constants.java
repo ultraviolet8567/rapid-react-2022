@@ -13,12 +13,12 @@ public class Constants {
     public static double intakeSpeed = 14500;
     public static double conveyorSpeed = 10000;
 
-    public static double hangerSpeed = 2700;
+    public static double hangerSpeed = 10000;
     
     public static double hubBigSpeed = 5000;
-    public static double hubSmallSpeed = 7000;
+    public static double hubSmallSpeed = 9500;
     
-    public static double fenderBigSpeed = 11000;
+    public static double fenderBigSpeed = 9000;
     public static double fenderSmallSpeed = 11000;
     
     public static double distanceBigSpeed = 11000;

@@ -22,10 +22,10 @@ public class Drive extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        filterLX = new SlewRateLimiter(0.5);
-        filterLY = new SlewRateLimiter(0.5);
-        filterRX = new SlewRateLimiter(0.5);
-        filterRY = new SlewRateLimiter(0.5);
+        filterLX = new SlewRateLimiter(0.1);
+        filterLY = new SlewRateLimiter(0.1);
+        filterRX = new SlewRateLimiter(0.1);
+        filterRY = new SlewRateLimiter(0.1);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -77,16 +77,16 @@ public class Drive extends CommandBase {
         
         switch(joystick) {
             case "LeftX":
-                value = filterLX.calculate(xbox.getLeftX() * multiplier);
+                value = xbox.getLeftX() * multiplier;
                 break;
             case "LeftY":
-                value = filterLY.calculate(xbox.getLeftY() * multiplier);
+                value = xbox.getLeftY() * multiplier;
                 break;
             case "RightX":
-                value = filterRX.calculate(xbox.getRightX() * multiplier);
+                value = xbox.getRightX() * multiplier;
                 break;
             case "RightY":
-                value = filterRY.calculate(xbox.getRightY() * multiplier);
+                value = xbox.getRightY() * multiplier;
                 break;
             default:
                 value = 0;
