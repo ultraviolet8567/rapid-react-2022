@@ -1,6 +1,5 @@
 package frc.robot.commands;
 
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
@@ -9,10 +8,7 @@ import frc.robot.subsystems.Drivetrain;
 
 public class Drive extends CommandBase {
     private final Drivetrain m_drivetrain;
-    private SlewRateLimiter filterLX;
-    private SlewRateLimiter filterLY;
-    private SlewRateLimiter filterRX;
-    private SlewRateLimiter filterRY;
+    private final XboxController xbox = RobotContainer.getInstance().getXboxController();
     
     public Drive(Drivetrain subsystem) {
         m_drivetrain = subsystem;
@@ -22,36 +18,39 @@ public class Drive extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        filterLX = new SlewRateLimiter(0.1);
-        filterLY = new SlewRateLimiter(0.1);
-        filterRX = new SlewRateLimiter(0.1);
-        filterRY = new SlewRateLimiter(0.1);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        XboxController xbox = RobotContainer.getInstance().getXboxController();
-
         if (m_drivetrain.isSingleStickDrive()) {
             if (Math.abs(xbox.getLeftY()) > 0.1 || Math.abs(xbox.getLeftX()) > 0.1) {
                 // Normal single stick drive
                 m_drivetrain.getDifferentialDrive().arcadeDrive(
-                    limiter("LeftY", -1),
-                    limiter("LeftX", 1));
+                    -xbox.getLeftY(),
+                    xbox.getLeftX(),
+                    true);
             }
             else {
                 // Fine-tuning single stick drive
                 m_drivetrain.getDifferentialDrive().arcadeDrive(
-                    limiter("RightY", -0.5),
-                    limiter("RightX", 0.5));
+                    -0.5 * xbox.getRightY(),
+                    0.5 * xbox.getRightX(),
+                    true);
             }
+        }
+        else if (m_drivetrain.isTankDrive()) {
+            m_drivetrain.getDifferentialDrive().tankDrive(
+                -xbox.getLeftY(),
+                -xbox.getRightY(),
+                true);
         }
         else {
             // Split control drive
             m_drivetrain.getDifferentialDrive().arcadeDrive(
-                limiter("LeftY", -1),
-                limiter("RightX", 1));
+                -xbox.getLeftY(),
+                xbox.getRightX(),
+                true);
         }
     }
 
@@ -71,28 +70,5 @@ public class Drive extends CommandBase {
         return false;
     }
 
-    private double limiter(String joystick, double multiplier) {
-        XboxController xbox = RobotContainer.getInstance().getXboxController();
-        double value;
-        
-        switch(joystick) {
-            case "LeftX":
-                value = xbox.getLeftX() * multiplier;
-                break;
-            case "LeftY":
-                value = xbox.getLeftY() * multiplier;
-                break;
-            case "RightX":
-                value = xbox.getRightX() * multiplier;
-                break;
-            case "RightY":
-                value = xbox.getRightY() * multiplier;
-                break;
-            default:
-                value = 0;
-                break;
-        }
-
-        return value;
-    }
+    // Exponential modifier function: 0.1 * Math.pow(3.5, 2 * input) - 0.1
 }

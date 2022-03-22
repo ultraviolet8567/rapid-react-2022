@@ -31,6 +31,7 @@
       "/Shuffleboard/Drive Settings/Differential drive": "DifferentialDrive",
       "/Shuffleboard/Drive Settings/Differential drive 1": "DifferentialDrive",
       "/Shuffleboard/Drive Settings/Drive mode": "String Chooser",
+      "/Shuffleboard/Match Data/Drive mode": "String Chooser",
       "/SmartDashboard/Auto Mode": "String Chooser",
       "/SmartDashboard/Auto choices": "String Chooser",
       "/SmartDashboard/Autonomous Command": "Command",
