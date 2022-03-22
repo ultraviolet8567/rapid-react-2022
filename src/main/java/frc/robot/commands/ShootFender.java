@@ -1,9 +1,6 @@
 package frc.robot.commands;
 
-import com.revrobotics.CANSparkMax.ControlType;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.subsystems.Shooter;
 
 public class ShootFender extends CommandBase{
@@ -17,13 +14,12 @@ public class ShootFender extends CommandBase{
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+        m_shooter.setMode("Fender");
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_shooter.runBigFlywheel(Constants.fenderBigSpeed, ControlType.kVelocity);
-        m_shooter.runSmallFlywheel(Constants.fenderSmallSpeed, ControlType.kVelocity);
     }
 
     // Called once the command ends or is interrupted.
@@ -34,7 +30,7 @@ public class ShootFender extends CommandBase{
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
     }
 
     @Override

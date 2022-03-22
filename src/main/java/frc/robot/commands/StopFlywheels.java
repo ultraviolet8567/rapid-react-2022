@@ -1,7 +1,5 @@
 package frc.robot.commands;
 
-import com.revrobotics.CANSparkMax.ControlType;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
@@ -17,8 +15,7 @@ public class StopFlywheels extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        m_shooter.runBigFlywheel(0, ControlType.kVelocity);
-        m_shooter.runSmallFlywheel(0, ControlType.kVelocity);
+        m_shooter.setMode("Off");
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -29,6 +26,7 @@ public class StopFlywheels extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
+        m_shooter.setMode("Low hub");
     }
 
     // Returns true when the command should end.
