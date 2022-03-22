@@ -11,6 +11,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 
@@ -21,6 +22,9 @@ public class Shooter extends SubsystemBase {
 
     private NetworkTableEntry bVelocity;
     private NetworkTableEntry sVelocity;
+
+    private NetworkTableEntry velocitiesToggle;
+    private String velocity = "Lower hub";
 
     public Shooter() {
         bigFlywheel = new CANSparkMax(1, MotorType.kBrushless);
@@ -33,6 +37,11 @@ public class Shooter extends SubsystemBase {
         sVelocity = Shuffleboard.getTab("Shooter").add("Small flywheel", 0).withWidget(BuiltInWidgets.kGraph)
             .withProperties(Map.of("lower bound", -0.5, "upper bound", 15.5, "automatic bounds", false, "unit", "RPM"))
             .getEntry();
+
+        velocitiesToggle = Shuffleboard.getTab("Match Data").add("Shooting mode", "Lower hub").withWidget(BuiltInWidgets.kTextView)
+            .withSize(2, 1)
+            .withPosition(3, 0)
+            .getEntry();
     }
 
     // This method will be called once per scheduler run
@@ -40,6 +49,8 @@ public class Shooter extends SubsystemBase {
     public void periodic() {
         bVelocity.setNumber(bigFlywheel.getEncoder().getVelocity() / 1000);
         sVelocity.setNumber(smallFlywheel.getEncoder().getVelocity() / 1000);
+
+        velocitiesToggle.setString(velocity);
     }
 
     // This method will be called once per scheduler run when in simulation
@@ -61,5 +72,42 @@ public class Shooter extends SubsystemBase {
     public void runSmallFlywheel(double setPoint, ControlType type) {
         SparkMaxPIDController pid_controller = RobotContainer.getDefaultPIDController(smallFlywheel);
         pid_controller.setReference(setPoint, type);
+    }
+
+    public double[] flywheelSpeeds() {
+        // Fender
+        if (velocity == "Fender") {
+            return new double[] { Constants.fenderBigSpeed, Constants.fenderSmallSpeed };
+        }
+        else if (velocity == "Distance") {
+            return new double[] { Constants.distanceBigSpeed, Constants.distanceSmallSpeed };
+        }
+        // Lower hub
+        else {
+            return new double[] { Constants.hubBigSpeed, Constants.hubSmallSpeed };
+        }
+    } 
+
+    public void setMode(String mode) {
+        if (mode == "Fender") {
+            velocity = "Fender";
+        }
+        else if (mode == "Distance") {
+            velocity = "Distance";
+        }
+        // Lower hub
+        else {
+            velocity = "Lower hub";
+        }
+    }
+
+    public void toggle() {
+        if (velocity == "Fender") {
+            velocity = "Lower hub";
+        }
+        // Lower hub
+        else {
+            velocity = "Fender";
+        }
     }
 }

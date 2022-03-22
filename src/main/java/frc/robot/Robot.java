@@ -2,8 +2,15 @@ package frc.robot;
 
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
+import edu.wpi.first.networktables.NetworkTableEntry;
+
+import java.util.Map;
+
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -20,6 +27,8 @@ public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
     private RobotContainer m_robotContainer;
 
+    private NetworkTableEntry postTime;
+
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
@@ -30,6 +39,12 @@ public class Robot extends TimedRobot {
         // autonomous chooser on the dashboard.
         m_robotContainer = RobotContainer.getInstance();
         HAL.report(tResourceType.kResourceType_Framework, tInstances.kFramework_RobotBuilder);
+
+        postTime = Shuffleboard.getTab("Match Data").add("Time left", 0).withWidget(BuiltInWidgets.kNumberBar)
+            .withProperties(Map.of("min", 0, "max", 195))
+            .withPosition(0, 0)
+            .withSize(2, 1)
+            .getEntry();
     }
 
     /**
@@ -45,6 +60,8 @@ public class Robot extends TimedRobot {
         // commands, running already-scheduled commands, removing finished or interrupted commands,
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
         // block in order for anything in the Command-based framework to work.
+        postTime.setNumber(195 - Timer.getMatchTime());
+
         CommandScheduler.getInstance().run();
     }
 

@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -30,6 +29,7 @@ public class RobotContainer {
     private static RobotContainer m_robotContainer = new RobotContainer();
 
     // Shuffleboard tabs
+    public final ShuffleboardTab matchTab = Shuffleboard.getTab("Match Data");
     public final ShuffleboardTab driveSettings = Shuffleboard.getTab("Drive Settings");
     public final ShuffleboardTab cameraTab = Shuffleboard.getTab("Camera");
     public final ShuffleboardTab autoTab = Shuffleboard.getTab("Auto");
@@ -60,20 +60,24 @@ public class RobotContainer {
 
         // Configure default commands
         m_drivetrain.setDefaultCommand(new Drive(m_drivetrain));
-        m_shooter.setDefaultCommand(new ShootLowerHub(m_shooter));
+        m_shooter.setDefaultCommand(new RunFlywheels(m_shooter));
         
         // Configure autonomous sendable chooser and send to Shuffleboard
-        m_chooser.addOption("Drive out auto", new AutoDriveOut(m_drivetrain));
+        m_chooser.addOption("Drive out auto", new AutoDriveOut(m_drivetrain, m_collection));
         m_chooser.setDefaultOption("One ball auto", new AutoOneBall(m_drivetrain, m_collection, m_shooter));
         m_chooser.addOption("Two ball auto", new AutoTwoBall(m_drivetrain, m_collection, m_shooter));
-        autoTab.add("Auto mode", m_chooser).withWidget(BuiltInWidgets.kComboBoxChooser)
-            .withSize(2, 1);
-        
-        // Send camera to ShuffleBoard
-        cameraTab.add("Front camera", frontCamera).withWidget(BuiltInWidgets.kCameraStream)
-            .withSize(5, 4);
-        cameraTab.add("Back camera", backCamera).withWidget(BuiltInWidgets.kCameraStream)
-            .withSize(5, 4);
+        matchTab.add("Auto mode", m_chooser).withWidget(BuiltInWidgets.kComboBoxChooser)
+            .withSize(2, 1)
+            .withPosition(8, 0);
+
+        // Send cameras to Shuffleboard
+        matchTab.add("Front camera", frontCamera).withWidget(BuiltInWidgets.kCameraStream)
+            .withSize(5, 3)
+            .withPosition(0, 1);
+        matchTab.add("Back camera", backCamera).withWidget(BuiltInWidgets.kCameraStream)
+            .withSize(5, 3)
+            .withPosition(5, 1)
+            .withProperties(Map.of("rotation", "HALF"));
     }
 
     /**
@@ -85,10 +89,10 @@ public class RobotContainer {
     private void configureButtonBindings() {
         // Create some buttons
         final JoystickButton backButton = new JoystickButton(xboxController, XboxController.Button.kBack.value);
-        backButton.whenPressed(new DriveToggle(m_drivetrain), true);
+        backButton.whenPressed(new ReverseDriving(m_drivetrain), true);
 
         final JoystickButton startButton = new JoystickButton(xboxController, XboxController.Button.kStart.value);
-        startButton.toggleWhenPressed(new StopFlywheels(m_shooter), true);
+        startButton.whenPressed(new ReverseCollection(m_collection), true);
 
         final JoystickButton rightBumper = new JoystickButton(xboxController, XboxController.Button.kRightBumper.value);        
         rightBumper.toggleWhenPressed(new Collect(m_collection), true);
@@ -106,19 +110,7 @@ public class RobotContainer {
         buttonX.whenPressed(new ShootFender(m_shooter), true);
 
         final JoystickButton buttonB = new JoystickButton(xboxController, XboxController.Button.kB.value);
-        buttonB.whenPressed(new ShootDistance(m_shooter), true);
-
-        final POVButton up = new POVButton(xboxController, 0);
-        up.whileHeld(new IncreaseV(), true);
-
-        final POVButton down = new POVButton(xboxController, 180);
-        down.whileHeld(new DecreaseV(), true);
-
-        final POVButton left = new POVButton(xboxController, 270);
-        left.whileHeld(new DecreaseH(), true);
-
-        final POVButton right = new POVButton(xboxController, 90);
-        right.whileHeld(new IncreaseH(), true);
+        buttonB.whenPressed(new ShootLower(m_shooter), true);
     }
 
     public static RobotContainer getInstance() {

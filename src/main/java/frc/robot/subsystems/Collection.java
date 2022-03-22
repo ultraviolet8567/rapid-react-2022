@@ -5,6 +5,7 @@ import java.util.Map;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import com.revrobotics.SparkMaxPIDController;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -28,6 +29,9 @@ public class Collection extends SubsystemBase {
     private NetworkTableEntry conveyorVelocity;
     private NetworkTableEntry detectedTop;
     private NetworkTableEntry detectedBottom;
+    
+    private NetworkTableEntry reversedToggle;
+    private Boolean directionReversed = false;
 
     public Collection() {
         intake = new CANSparkMax(7, MotorType.kBrushless);
@@ -47,9 +51,15 @@ public class Collection extends SubsystemBase {
             .withPosition(3, 0)
             .getEntry();
 
-        ShuffleboardLayout sensors = Shuffleboard.getTab("Collection").getLayout("Sensors", BuiltInLayouts.kList).withSize(2, 2);
-        detectedTop = sensors.add("Top ball", ballTop()).withWidget(BuiltInWidgets.kBooleanBox).withProperties(Map.of("send to top", true)).getEntry();
+        ShuffleboardLayout sensors = Shuffleboard.getTab("Collection").getLayout("Sensors", BuiltInLayouts.kList)
+            .withSize(2, 2);
+        detectedTop = sensors.add("Top ball", ballTop()).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
         detectedBottom = sensors.add("Bottom ball", ballBottom()).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
+
+        reversedToggle = Shuffleboard.getTab("Match Data").add("Collect reversed", false).withWidget(BuiltInWidgets.kToggleSwitch)
+            .withSize(1, 1)
+            .withPosition(7, 0)
+            .getEntry();
     }
 
     // This method will be called once per scheduler run
@@ -59,6 +69,10 @@ public class Collection extends SubsystemBase {
         conveyorVelocity.setNumber(conveyor.getEncoder().getVelocity() / 1000);
         detectedTop.setBoolean(ballTop());
         detectedBottom.setBoolean(ballBottom());
+
+        // directionReversed = reversedToggle.getBoolean(directionReversed);
+        intake.setInverted(!directionReversed);
+        conveyor.setInverted(directionReversed);
     }
 
     // This method will be called once per scheduler run when in simulation
@@ -78,6 +92,11 @@ public class Collection extends SubsystemBase {
     public boolean ballBottom() {
         // Flip the value of the DIO since detection corresponds to 0
         return !detectorBottom.get();
+    }
+
+    public void toggleDirection() {
+        directionReversed = !directionReversed;
+        reversedToggle.setBoolean(directionReversed);
     }
 
     // Sets a parameter (type) of the intake to the given value (setPoint)

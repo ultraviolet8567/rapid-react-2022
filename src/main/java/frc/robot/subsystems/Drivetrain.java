@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -20,7 +21,10 @@ public class Drivetrain extends SubsystemBase {
     private MotorControllerGroup rightGroup;
     private DifferentialDrive differentialDrive;
 
-    private SendableChooser<Boolean> driveMode = new SendableChooser<>();
+    private SendableChooser<String> driveMode = new SendableChooser<>();
+    
+    private NetworkTableEntry reversedToggle;
+    private Boolean drivingReversed = false;
 
     public Drivetrain() {
         leftFront = new CANSparkMax(3, MotorType.kBrushless);
@@ -38,16 +42,27 @@ public class Drivetrain extends SubsystemBase {
         differentialDrive.setExpiration(0.1);
         differentialDrive.setMaxOutput(0.5);
         
-        driveMode.setDefaultOption("Single stick", true);
-        driveMode.addOption("Split control", false);
+        driveMode.addOption("Single stick", "Single stick");
+        driveMode.setDefaultOption("Split control", "Split control");
+        driveMode.addOption("Tank drive", "Tank drive");
 
-        Shuffleboard.getTab("Drive Settings").add("Drive mode", driveMode).withWidget(BuiltInWidgets.kComboBoxChooser).withSize(2, 1);
-        Shuffleboard.getTab("Drive Settings").add("Differential drive", differentialDrive).withWidget(BuiltInWidgets.kDifferentialDrive).withSize(4, 3);
+        Shuffleboard.getTab("Drive Settings").add("Differential drive", differentialDrive).withWidget(BuiltInWidgets.kDifferentialDrive)
+            .withSize(4, 3);
+        Shuffleboard.getTab("Match Data").add("Drive mode", driveMode).withWidget(BuiltInWidgets.kComboBoxChooser)
+            .withSize(2, 1)
+            .withPosition(5, 0);
+        reversedToggle = Shuffleboard.getTab("Match Data").add("Drive reversed", false).withWidget(BuiltInWidgets.kToggleSwitch)
+            .withSize(1, 1)
+            .withPosition(2, 0)
+            .getEntry();
     }
 
     // This method will be called once per scheduler run
     @Override
     public void periodic() {
+        // drivingReversed = reversedToggle.getBoolean(drivingReversed);
+        leftGroup.setInverted(drivingReversed);
+        rightGroup.setInverted(!drivingReversed);
     }
 
     // This method will be called once per scheduler run when in simulation
@@ -67,17 +82,31 @@ public class Drivetrain extends SubsystemBase {
         return differentialDrive;
     }
 
-    public boolean isSingleStickDrive() {
-        return driveMode.getSelected();
+    public Boolean isSingleStickDrive() {
+        return driveMode.getSelected() == "Single stick";
+    }
+
+    public Boolean isTankDrive() {
+        return driveMode.getSelected() == "Tank drive";
     }
 
     public void toggleSingleStick() {
         // Single-stick mode equates to true
-        if (driveMode.getSelected()) {
-            driveMode.setDefaultOption("Split control", false);
+        switch (driveMode.getSelected()) {
+            case "Split control":
+                driveMode.setDefaultOption("Single stick", "Single stick");
+                break;
+            case "Single stick":
+                driveMode.setDefaultOption("Tank drive", "Tank drive");
+                break;
+            case "Tank drive":
+                driveMode.setDefaultOption("Split control", "Split control");
+                break;
         }
-        else {
-            driveMode.setDefaultOption("Single stick", true);
-        }
+    }
+
+    public void toggleDrivingDirection() {
+        drivingReversed = !drivingReversed;
+        reversedToggle.setBoolean(drivingReversed);
     }
 }
