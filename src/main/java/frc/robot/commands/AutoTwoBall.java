@@ -1,16 +1,9 @@
 package frc.robot.commands;
 
-import java.util.Map;
-
 import com.revrobotics.CANSparkMax.ControlType;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
-// import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Collection;
@@ -23,11 +16,6 @@ public class AutoTwoBall extends CommandBase {
     private Collection m_collection;
     private Shooter m_shooter;
     private Timer timer;
-
-    private double rotations = 0;
-    private boolean collectedBall = false;
-
-    private NetworkTableEntry stopwatch;
 
     public AutoTwoBall(Drivetrain drivetrain, Collection collection, Shooter shooter) {
         m_drivetrain = drivetrain;
@@ -44,34 +32,28 @@ public class AutoTwoBall extends CommandBase {
         timer = new Timer();
         timer.start();
 
-        stopwatch = Shuffleboard.getTab("Auto").add("Stopwatch", timer.get()).withWidget(BuiltInWidgets.kDial)
-            .withProperties(Map.of("min", 0, "max", 15, "show value", true))
-            .getEntry();
-
-        m_drivetrain.getDifferentialDrive().arcadeDrive(0.5, 0);
-
-        m_collection.runIntake(Constants.intakeSpeed, ControlType.kVelocity);
+        m_collection.runIntake(-Constants.intakeSpeed / 10, ControlType.kVelocity);
         m_shooter.runBigFlywheel(Constants.fenderBigSpeed, ControlType.kVelocity);
-        m_shooter.runSmallFlywheel(Constants.fenderSmallSpeed, ControlType.kVelocity);
+        m_shooter.runSmallFlywheel(Constants.fenderSmallSpeed * 1.25, ControlType.kVelocity);
     }
 // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        stopwatch.setNumber(timer.get());
-
-        if (m_collection.ballBottom()){
-            collectedBall = true;
-            rotations = -m_drivetrain.leftFront.getEncoder().getPosition();
+        if (timer.get() > 1) {
+            m_collection.runIntake(Constants.intakeSpeed, ControlType.kVelocity);
+            m_drivetrain.getDifferentialDrive().arcadeDrive(0.5, 0);
         }
-        if (collectedBall) {
-            if (m_drivetrain.leftFront.getEncoder().getPosition() != rotations) {
-                m_drivetrain.getDifferentialDrive().arcadeDrive(-0.5, 0);
-            }
-            else {
-                m_drivetrain.stopMotors();
-                m_collection.runConveyor(Constants.conveyorSpeed, ControlType.kVelocity);
-            
-            }
+        if (timer.get() >= 6) {
+            m_drivetrain.stopMotors();
+        }
+        if (timer.get() >= 6.25) {
+            m_drivetrain.getDifferentialDrive().arcadeDrive(-0.5, 0);
+        }
+        if (timer.get() >= 11.25) {
+            m_drivetrain.stopMotors();
+        }
+        if (timer.get() >= 11.75) {
+            m_collection.runConveyor(Constants.conveyorSpeed * 0.9, ControlType.kVelocity);
         }
     }
 
@@ -90,7 +72,7 @@ public class AutoTwoBall extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return timer.get() >= 15; // (timer.get() == 15 || !m_collection.ballTop() && !m_collection.ballBottom());
+        return false;
     }
 
     @Override
