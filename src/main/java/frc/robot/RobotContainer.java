@@ -36,12 +36,14 @@ public class RobotContainer {
     public final ShuffleboardTab collectionTab = Shuffleboard.getTab("Collection");
     public final ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
     public final ShuffleboardTab hangerTab = Shuffleboard.getTab("Hanger");
+    public final ShuffleboardTab limelightTab = Shuffleboard.getTab("Limelight");
 
     // Subsystems
     public final Shooter m_shooter = new Shooter();
     public final Drivetrain m_drivetrain = new Drivetrain();
     public final Collection m_collection = new Collection();
     public final Hanger m_hanger = new Hanger();
+    public final Limelight m_limelight = new Limelight();
 
     // Joysticks
     private final XboxController xboxController = new XboxController(0);
@@ -89,7 +91,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         // Create some buttons
         final JoystickButton backButton = new JoystickButton(xboxController, XboxController.Button.kBack.value);
-        backButton.whenPressed(new ReverseDriving(m_drivetrain), true);
+        backButton.whenPressed(new AlignShooter(m_drivetrain, m_limelight, m_shooter), true);
 
         final JoystickButton startButton = new JoystickButton(xboxController, XboxController.Button.kStart.value);
         startButton.whenPressed(new ReverseCollection(m_collection), true);
