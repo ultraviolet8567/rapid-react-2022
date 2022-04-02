@@ -13,6 +13,7 @@ public class Collect extends CommandBase {
     private final Collection m_collection;
     private boolean ballReachedBottom;
     private boolean ballReachedTop;
+    private boolean spinConveyor;
     private Timer timer;
     
     public Collect(Collection subsystem) {
@@ -28,6 +29,7 @@ public class Collect extends CommandBase {
 
         ballReachedTop = false;
         ballReachedBottom = false;
+        spinConveyor = false;
 
         timer = new Timer();
     }
@@ -36,14 +38,20 @@ public class Collect extends CommandBase {
     @Override
     public void execute() {
         if (m_collection.ballTop()) {
-            m_collection.runConveyor(0, ControlType.kVelocity);
             ballReachedTop = true;
+            if (!spinConveyor) { m_collection.runConveyor(0, ControlType.kVelocity); }
         }
         if (m_collection.ballBottom()) {
             timer.start();
+            if (ballReachedTop) {
+                m_collection.runConveyor(Constants.conveyorSpeed / 5, ControlType.kVelocity);
+                spinConveyor = true;
+            }
         }
         if (timer.get() >= 3) {
             ballReachedBottom = true;
+            m_collection.runIntake(0, ControlType.kVelocity);
+            if (ballReachedTop) { m_collection.runConveyor(0, ControlType.kVelocity); }
         }
     }
 
@@ -53,7 +61,7 @@ public class Collect extends CommandBase {
         m_collection.runIntake(0, ControlType.kVelocity);
         m_collection.runConveyor(0, ControlType.kVelocity);
 
-        RobotContainer.getInstance().m_shooter.setMode("Fender");
+        // RobotContainer.getInstance().m_shooter.setMode("Fender");
     }
 
     // Returns true when the command should end.

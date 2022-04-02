@@ -10,17 +10,17 @@ constants are needed, to reduce verbosity.
 */
 
 public class Constants {
-    public static double intakeSpeed = 14500;
-    public static double conveyorSpeed = 10000;
+    public static double intakeSpeed = 14.5 * 1000;
+    public static double conveyorSpeed = 10 * 1000;
 
-    public static double hangerSpeed = 12500;
+    public static double hangerSpeed = 12.5 * 1000;
     
-    public static double hubBigSpeed = 5000;
-    public static double hubSmallSpeed = 9500;
+    public static double hubBigSpeed = 5 * 1000;
+    public static double hubSmallSpeed = 11.5 * 1000;
     
-    public static double fenderBigSpeed = 9000;
-    public static double fenderSmallSpeed = 11000;
+    public static double fenderBigSpeed = 9 * 1000;
+    public static double fenderSmallSpeed = 11 * 1000;
     
-    public static double distanceBigSpeed = 11000;
-    public static double distanceSmallSpeed = 11000;
+    public static double distanceBigSpeed = 11 * 1000;
+    public static double distanceSmallSpeed = 11 * 1000;
 }

@@ -20,7 +20,7 @@ import frc.robot.RobotContainer;
 
 public class Collection extends SubsystemBase {
     private CANSparkMax intake;
-    private CANSparkMax conveyor;
+    public CANSparkMax conveyor;
 
     private DigitalInput detectorTop;
     private DigitalInput detectorBottom;

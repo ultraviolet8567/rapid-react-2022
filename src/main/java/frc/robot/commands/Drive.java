@@ -8,7 +8,7 @@ import frc.robot.subsystems.Drivetrain;
 
 public class Drive extends CommandBase {
     private final Drivetrain m_drivetrain;
-    private final XboxController xbox = RobotContainer.getInstance().getXboxController();
+    private XboxController xbox;
     
     public Drive(Drivetrain subsystem) {
         m_drivetrain = subsystem;
@@ -18,6 +18,7 @@ public class Drive extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+        xbox = RobotContainer.getInstance().getXboxController();
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -49,7 +50,7 @@ public class Drive extends CommandBase {
             // Split control drive
             m_drivetrain.getDifferentialDrive().arcadeDrive(
                 -xbox.getLeftY(),
-                xbox.getRightX(),
+                xbox.getRightX() / Math.sqrt(2),
                 true);
         }
     }
