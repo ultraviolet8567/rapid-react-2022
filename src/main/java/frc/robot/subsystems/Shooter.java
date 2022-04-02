@@ -16,12 +16,13 @@ import frc.robot.RobotContainer;
 
 
 public class Shooter extends SubsystemBase {
-
     private CANSparkMax bigFlywheel;
     private CANSparkMax smallFlywheel;
 
     private NetworkTableEntry bVelocity;
     private NetworkTableEntry sVelocity;
+    private NetworkTableEntry bSet;
+    private NetworkTableEntry sSet;
 
     private NetworkTableEntry velocitiesToggle;
     private String velocity = "Lower hub";
@@ -32,15 +33,24 @@ public class Shooter extends SubsystemBase {
         smallFlywheel = new CANSparkMax(2, MotorType.kBrushless);
 
         bVelocity = Shuffleboard.getTab("Shooter").add("Big flywheel", 0).withWidget(BuiltInWidgets.kGraph)
-            .withProperties(Map.of("lower bound", -0.5, "upper bound", 15.5, "automatic bounds", false, "unit", "RPM"))
+            .withProperties(Map.of("lower bound", -0.5, "upper bound", 40.5, "automatic bounds", false, "unit", "RPM"))
             .getEntry();
         sVelocity = Shuffleboard.getTab("Shooter").add("Small flywheel", 0).withWidget(BuiltInWidgets.kGraph)
-            .withProperties(Map.of("lower bound", -0.5, "upper bound", 15.5, "automatic bounds", false, "unit", "RPM"))
+            .withProperties(Map.of("lower bound", -0.5, "upper bound", 40.5, "automatic bounds", false, "unit", "RPM"))
             .getEntry();
 
         velocitiesToggle = Shuffleboard.getTab("Match Data").add("Shooting mode", "Lower hub").withWidget(BuiltInWidgets.kTextView)
             .withSize(2, 1)
             .withPosition(3, 0)
+            .getEntry();
+
+        bSet = Shuffleboard.getTab("Shooter").add("Big flywheel set speed", Constants.distanceBigSpeed / 1000).withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0.5, "max", 40, "block increment", 0.1))
+            .withPosition(6, 0)
+            .getEntry();
+        sSet = Shuffleboard.getTab("Shooter").add("Small flywheel set speed", Constants.distanceBigSpeed / 1000).withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0.5, "max", 40, "block increment", 0.1))
+            .withPosition(6, 1)
             .getEntry();
     }
 
@@ -51,6 +61,9 @@ public class Shooter extends SubsystemBase {
         sVelocity.setNumber(smallFlywheel.getEncoder().getVelocity() / 1000);
 
         velocitiesToggle.setString(velocity);
+
+        Constants.distanceBigSpeed = 1000 * bSet.getDouble(Constants.distanceBigSpeed / 1000);
+        Constants.distanceSmallSpeed = 1000 * sSet.getDouble(Constants.distanceSmallSpeed / 1000);
     }
 
     // This method will be called once per scheduler run when in simulation
@@ -104,6 +117,9 @@ public class Shooter extends SubsystemBase {
     public void toggle() {
         if (velocity == "Fender") {
             velocity = "Lower hub";
+        }
+        else if (velocity == "Lower hub") {
+            velocity = "Distance";
         }
         // Lower hub
         else {
