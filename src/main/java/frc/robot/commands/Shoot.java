@@ -23,7 +23,6 @@ public class Shoot extends CommandBase {
     @Override
     public void initialize() {
         m_collection.runConveyor(Constants.conveyorSpeed, ControlType.kVelocity);
-        // m_shooter.setMode("Fender");
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -35,7 +34,7 @@ public class Shoot extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_collection.runConveyor(0, ControlType.kVelocity);
-        m_shooter.setMode("Lower hub");
+        m_shooter.setMode("Off");
     }
 
     // Returns true when the command should end.

@@ -5,7 +5,6 @@ import com.revrobotics.CANSparkMax.ControlType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.Collection;
 
 
@@ -60,8 +59,6 @@ public class Collect extends CommandBase {
     public void end(boolean interrupted) {
         m_collection.runIntake(0, ControlType.kVelocity);
         m_collection.runConveyor(0, ControlType.kVelocity);
-
-        // RobotContainer.getInstance().m_shooter.setMode("Fender");
     }
 
     // Returns true when the command should end.
