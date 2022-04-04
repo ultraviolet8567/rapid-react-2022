@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -51,6 +52,7 @@ public class RobotContainer {
     // Cameras
     public UsbCamera frontCamera = CameraServer.startAutomaticCapture(0);
     public UsbCamera backCamera = CameraServer.startAutomaticCapture(1);
+    public HttpCamera limelightFeed = new HttpCamera("limelight", "http://10.85.67.11:5800/stream.mjpg");
 
     // Autonomous chooser
     SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -76,10 +78,11 @@ public class RobotContainer {
         matchTab.add("Front camera", frontCamera).withWidget(BuiltInWidgets.kCameraStream)
             .withSize(5, 3)
             .withPosition(0, 1);
-        matchTab.add("Back camera", backCamera).withWidget(BuiltInWidgets.kCameraStream)
+        matchTab.add("Limelight", limelightFeed).withWidget(BuiltInWidgets.kCameraStream)
             .withSize(5, 3)
             .withPosition(5, 1)
-            .withProperties(Map.of("rotation", "HALF"));
+            .withProperties(Map.of("show crosshair", false, "show controls", false));
+
     }
 
     /**
@@ -91,7 +94,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         // Create some buttons
         final JoystickButton backButton = new JoystickButton(xboxController, XboxController.Button.kBack.value);
-        backButton.whenPressed(new AlignShooter(m_drivetrain, m_limelight, m_shooter), true);
+        backButton.toggleWhenPressed(new AlignShooter(m_drivetrain, m_limelight, m_shooter), true);
 
         final JoystickButton startButton = new JoystickButton(xboxController, XboxController.Button.kStart.value);
         startButton.whenPressed(new ReverseCollection(m_collection), true);

@@ -14,7 +14,7 @@ import frc.robot.Constants;
 
 
 public class Limelight extends SubsystemBase {
-    private NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
+    public NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
     private ShuffleboardTab limelightTab = Shuffleboard.getTab("Limelight");
 
     public boolean validTargets = false;
@@ -43,19 +43,28 @@ public class Limelight extends SubsystemBase {
     
 
     public Limelight() {
-        valid_targets = limelightTab.add("Sees targets", false).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
+        valid_targets = limelightTab.add("Sees targets", false).withWidget(BuiltInWidgets.kBooleanBox)
+            .withPosition(0, 1)
+            .getEntry();
         h_offset = limelightTab.add("Horizontal offset", 0).withWidget(BuiltInWidgets.kNumberBar)
             .withProperties(Map.of("min", -29.8, "max", 29.8))
             .withSize(2, 1)
+            .withPosition(0, 0)
             .getEntry();
         v_offset = limelightTab.add("Vertical offset", 0).withWidget(BuiltInWidgets.kNumberBar)
             .withProperties(Map.of("min", -24.85, "max", 24.85))
             .withSize(2, 1)
+            .withPosition(8, 0)
             .getEntry();
-        target_area = limelightTab.add("Area", 0).withWidget(BuiltInWidgets.kTextView).getEntry();
+        target_area = limelightTab.add("Area", 0).withWidget(BuiltInWidgets.kTextView)
+            .withPosition(1, 1)
+            .getEntry();
         calculated_distance = limelightTab.add("Calculated distance", 0).withWidget(BuiltInWidgets.kTextView)
             .withSize(2, 1)
+            .withPosition(8, 1)
             .getEntry();
+
+        limelight.getEntry("ledMode").setDouble(0);
     }
 
     // This method will be called once per scheduler run

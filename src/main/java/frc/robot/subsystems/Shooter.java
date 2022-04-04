@@ -27,7 +27,7 @@ public class Shooter extends SubsystemBase {
     private NetworkTableEntry sNumVelocity;
 
     private NetworkTableEntry velocitiesToggle;
-    private String velocity = "Lower hub";
+    private String velocity = "Off"; // "Lower hub";
 
     public Shooter() {
         bigFlywheel = new CANSparkMax(1, MotorType.kBrushless);
@@ -105,6 +105,9 @@ public class Shooter extends SubsystemBase {
         else if (velocity == "Distance") {
             return new double[] { Constants.distanceBigSpeed, Constants.distanceSmallSpeed };
         }
+        else if (velocity == "Off") {
+            return new double[] { 0, 0 };
+        }
         // Lower hub
         else {
             return new double[] { Constants.hubBigSpeed, Constants.hubSmallSpeed };
@@ -130,6 +133,9 @@ public class Shooter extends SubsystemBase {
         }
         else if (velocity == "Lower hub") {
             velocity = "Distance";
+        }
+        else if (velocity == "Distance") {
+            velocity = "Off";
         }
         // Lower hub
         else {
