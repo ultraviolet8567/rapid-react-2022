@@ -19,6 +19,7 @@
       "/LiveWindow/Drivetrain/RightGroup": "Motor Controller",
       "/LiveWindow/Hanger": "Subsystem",
       "/LiveWindow/Hanger/HangerGroup": "Motor Controller",
+      "/LiveWindow/Limelight": "Subsystem",
       "/LiveWindow/Shooter": "Subsystem",
       "/LiveWindow/Shooter/ShooterMCGroup": "Motor Controller",
       "/LiveWindow/Storage": "Subsystem",
@@ -31,6 +32,7 @@
       "/Shuffleboard/Drive Settings/Differential drive": "DifferentialDrive",
       "/Shuffleboard/Drive Settings/Differential drive 1": "DifferentialDrive",
       "/Shuffleboard/Drive Settings/Drive mode": "String Chooser",
+      "/Shuffleboard/Match Data/Auto mode": "String Chooser",
       "/Shuffleboard/Match Data/Drive mode": "String Chooser",
       "/SmartDashboard/Auto Mode": "String Chooser",
       "/SmartDashboard/Auto choices": "String Chooser",
@@ -71,6 +73,9 @@
       "Collection": {
         "open": true
       }
+    },
+    "Shuffleboard": {
+      "open": true
     },
     "SmartDashboard": {
       "Commands": {

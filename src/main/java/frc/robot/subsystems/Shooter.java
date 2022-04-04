@@ -23,6 +23,8 @@ public class Shooter extends SubsystemBase {
     private NetworkTableEntry sVelocity;
     private NetworkTableEntry bSet;
     private NetworkTableEntry sSet;
+    private NetworkTableEntry bNumVelocity;
+    private NetworkTableEntry sNumVelocity;
 
     private NetworkTableEntry velocitiesToggle;
     private String velocity = "Lower hub";
@@ -32,17 +34,21 @@ public class Shooter extends SubsystemBase {
         bigFlywheel.setInverted(false);
         smallFlywheel = new CANSparkMax(2, MotorType.kBrushless);
 
-        bVelocity = Shuffleboard.getTab("Shooter").add("Big flywheel", 0).withWidget(BuiltInWidgets.kGraph)
-            .withProperties(Map.of("lower bound", -0.5, "upper bound", 40.5, "automatic bounds", false, "unit", "RPM"))
-            .getEntry();
-        sVelocity = Shuffleboard.getTab("Shooter").add("Small flywheel", 0).withWidget(BuiltInWidgets.kGraph)
-            .withProperties(Map.of("lower bound", -0.5, "upper bound", 40.5, "automatic bounds", false, "unit", "RPM"))
-            .getEntry();
+        // bVelocity = Shuffleboard.getTab("Shooter").add("Big flywheel", 0).withWidget(BuiltInWidgets.kGraph)
+        //     .withProperties(Map.of("lower bound", -0.5, "upper bound", 40.5, "automatic bounds", false, "unit", "RPM"))
+        //     .getEntry();
+        // sVelocity = Shuffleboard.getTab("Shooter").add("Small flywheel", 0).withWidget(BuiltInWidgets.kGraph)
+        //     .withProperties(Map.of("lower bound", -0.5, "upper bound", 40.5, "automatic bounds", false, "unit", "RPM"))
+        //     .getEntry();
 
-        velocitiesToggle = Shuffleboard.getTab("Match Data").add("Shooting mode", "Lower hub").withWidget(BuiltInWidgets.kTextView)
-            .withSize(2, 1)
-            .withPosition(3, 0)
-            .getEntry();
+        // velocitiesToggle = Shuffleboard.getTab("Match Data").add("Shooting mode", "Lower hub").withWidget(BuiltInWidgets.kTextView)
+        //     .withSize(2, 1)
+        //     .withPosition(3, 0)
+        //     .getEntry();
+
+        // updates number velocity values to shuffleboard
+        bNumVelocity = Shuffleboard.getTab("Shooter").add("Big V", 0).withWidget(BuiltInWidgets.kTextView).getEntry();
+        sNumVelocity = Shuffleboard.getTab("Shooter").add("Small V", 0).withWidget(BuiltInWidgets.kTextView).getEntry();
 
         bSet = Shuffleboard.getTab("Shooter").add("Big flywheel set speed", Constants.distanceBigSpeed / 1000).withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0.5, "max", 40, "block increment", 0.1))
@@ -52,6 +58,7 @@ public class Shooter extends SubsystemBase {
             .withProperties(Map.of("min", 0.5, "max", 40, "block increment", 0.1))
             .withPosition(6, 1)
             .getEntry();
+
     }
 
     // This method will be called once per scheduler run
@@ -59,6 +66,9 @@ public class Shooter extends SubsystemBase {
     public void periodic() {
         bVelocity.setNumber(bigFlywheel.getEncoder().getVelocity() / 1000);
         sVelocity.setNumber(smallFlywheel.getEncoder().getVelocity() / 1000);
+
+        bNumVelocity = bVelocity;
+        sNumVelocity = sVelocity;
 
         velocitiesToggle.setString(velocity);
 
