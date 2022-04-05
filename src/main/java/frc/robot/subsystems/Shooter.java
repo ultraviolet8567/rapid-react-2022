@@ -19,8 +19,8 @@ public class Shooter extends SubsystemBase {
     private CANSparkMax bigFlywheel;
     private CANSparkMax smallFlywheel;
 
-    private NetworkTableEntry bVelocity;
-    private NetworkTableEntry sVelocity;
+    // private NetworkTableEntry bVelocity;
+    // private NetworkTableEntry sVelocity;
     private NetworkTableEntry bSet;
     private NetworkTableEntry sSet;
     private NetworkTableEntry bNumVelocity;
@@ -64,11 +64,11 @@ public class Shooter extends SubsystemBase {
     // This method will be called once per scheduler run
     @Override
     public void periodic() {
-        bVelocity.setNumber(bigFlywheel.getEncoder().getVelocity() / 1000);
-        sVelocity.setNumber(smallFlywheel.getEncoder().getVelocity() / 1000);
+        // bVelocity.setNumber(bigFlywheel.getEncoder().getVelocity() / 1000);
+        // sVelocity.setNumber(smallFlywheel.getEncoder().getVelocity() / 1000);
 
-        bNumVelocity = bVelocity;
-        sNumVelocity = sVelocity;
+        bNumVelocity.setNumber(bigFlywheel.getEncoder().getVelocity() / 1000);
+        sNumVelocity.setNumber(smallFlywheel.getEncoder().getVelocity() / 1000);
 
         velocitiesToggle.setString(velocity);
 
