@@ -11,6 +11,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 
@@ -21,6 +22,8 @@ public class Hanger extends SubsystemBase {
 
     private NetworkTableEntry leftVelocity;
     private NetworkTableEntry rightVelocity;
+
+    private boolean fastMode = true;
 
     public Hanger() {
         left = new CANSparkMax(9, MotorType.kBrushless);
@@ -48,12 +51,41 @@ public class Hanger extends SubsystemBase {
 
     // Put methods for controlling this subsystem here. Call these from Commands.
 
-    // Sets a parameter (type) of the hanger motors to the given value (setPoint)
-    // e.g. possible parameters are ControlType.kDutyCycle, ControlType.kPosition, ControlType.kVelocity, and ControlType.kVoltage
-    public void runHanger(double setPoint, ControlType type) {
+    public void toggleMode() {
+        fastMode = !fastMode;
+    }
+
+    public void runLeftHanger(boolean reverse) {
         SparkMaxPIDController left_controller = RobotContainer.getDefaultPIDController(left);
+        double setPoint = reverse ? -1 : 1;
+        
+        if (fastMode) {
+            setPoint = setPoint * Constants.hangerFastSpeed;
+        }
+        else {
+            setPoint = setPoint * Constants.hangerSlowSpeed;
+        }
+        left_controller.setReference(setPoint, ControlType.kVelocity);
+    }
+
+    public void runRightHanger(boolean reverse) {
         SparkMaxPIDController right_controller = RobotContainer.getDefaultPIDController(right);
-        left_controller.setReference(setPoint, type);
-        right_controller.setReference(setPoint, type);
+        double setPoint = reverse ? -1 : 1;
+
+        if (fastMode) {
+            setPoint = setPoint * Constants.hangerFastSpeed;
+        }
+        else {
+            setPoint = setPoint * Constants.hangerSlowSpeed;
+        }
+        right_controller.setReference(setPoint, ControlType.kVelocity);
+    }
+
+    public void stopLeftHanger() {
+        left.stopMotor();
+    }
+    
+    public void stopRightHanger() {
+        right.stopMotor();
     }
 }

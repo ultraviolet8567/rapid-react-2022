@@ -1,16 +1,12 @@
-package frc.robot.commands;
-
-import com.revrobotics.CANSparkMax.ControlType;
+package frc.robot.commands.Hanger;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.subsystems.Hanger;
 
-
-public class ExtendHanger extends CommandBase {
+public class HangerToggle extends CommandBase {
     private final Hanger m_hanger;
 
-    public ExtendHanger(Hanger subsystem) {
+    public HangerToggle(Hanger subsystem) {
         m_hanger = subsystem;
         addRequirements(m_hanger);
     }
@@ -18,7 +14,7 @@ public class ExtendHanger extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        m_hanger.runHanger(Constants.hangerSpeed, ControlType.kVelocity);
+        m_hanger.toggleMode();
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -29,13 +25,12 @@ public class ExtendHanger extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        m_hanger.runHanger(0, ControlType.kVelocity);
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
     }
 
     @Override

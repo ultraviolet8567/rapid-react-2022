@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.*;
+import frc.robot.commands.Hanger.*;
 import frc.robot.subsystems.*;
 
 
@@ -32,8 +33,6 @@ public class RobotContainer {
     // Shuffleboard tabs
     public final ShuffleboardTab matchTab = Shuffleboard.getTab("Match Data");
     public final ShuffleboardTab driveSettings = Shuffleboard.getTab("Drive Settings");
-    public final ShuffleboardTab cameraTab = Shuffleboard.getTab("Camera");
-    public final ShuffleboardTab autoTab = Shuffleboard.getTab("Auto");
     public final ShuffleboardTab collectionTab = Shuffleboard.getTab("Collection");
     public final ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
     public final ShuffleboardTab hangerTab = Shuffleboard.getTab("Hanger");
@@ -48,6 +47,7 @@ public class RobotContainer {
 
     // Joysticks
     private final XboxController xboxController = new XboxController(0);
+    private final XboxController hangerController = new XboxController(1);
 
     // Cameras
     public UsbCamera frontCamera = CameraServer.startAutomaticCapture(0);
@@ -105,17 +105,33 @@ public class RobotContainer {
         final JoystickButton leftBumper = new JoystickButton(xboxController, XboxController.Button.kLeftBumper.value);        
         leftBumper.toggleWhenPressed(new Shoot(m_shooter, m_collection), true);
 
-        final JoystickButton buttonY = new JoystickButton(xboxController, XboxController.Button.kY.value);        
-        buttonY.whileHeld(new ExtendHanger(m_hanger), true);
-
-        final JoystickButton buttonA = new JoystickButton(xboxController, XboxController.Button.kA.value);        
-        buttonA.whileHeld(new RetractHanger(m_hanger), true);
-
         final JoystickButton buttonX = new JoystickButton(xboxController, XboxController.Button.kX.value);
-        buttonX.whenPressed(new ShootFender(m_shooter), true);
+        buttonX.whenPressed(new ShootToggle(m_shooter), true);
 
         final JoystickButton buttonB = new JoystickButton(xboxController, XboxController.Button.kB.value);
-        buttonB.whenPressed(new ShootLower(m_shooter), true);
+        buttonB.toggleWhenPressed(new ShootDistance(m_shooter), true);
+
+
+        final JoystickButton h_leftStick = new JoystickButton(hangerController, XboxController.Button.kLeftStick.value);
+        h_leftStick.whenPressed(new HangerToggle(m_hanger), true);
+        
+        final JoystickButton h_leftBumper = new JoystickButton(hangerController, XboxController.Button.kLeftBumper.value);
+        h_leftBumper.whileHeld(new ExtendLeftHanger(m_hanger, false), true);
+        
+        final JoystickButton h_rightBumper = new JoystickButton(hangerController, XboxController.Button.kRightBumper.value);
+        h_rightBumper.whileHeld(new ExtendRightHanger(m_hanger), true);
+
+        final JoystickButton h_backButton = new JoystickButton(hangerController, XboxController.Button.kBack.value);
+        h_backButton.whileHeld(new RetractLeftHanger(m_hanger, false), true);
+        
+        final JoystickButton h_startButton = new JoystickButton(hangerController, XboxController.Button.kStart.value);
+        h_startButton.whileHeld(new RetractRightHanger(m_hanger), true);
+
+        final JoystickButton h_buttonY = new JoystickButton(hangerController, XboxController.Button.kY.value);
+        h_buttonY.whileHeld(new ExtendLeftHanger(m_hanger, true), true);
+
+        final JoystickButton h_buttonA = new JoystickButton(hangerController, XboxController.Button.kA.value);
+        h_buttonA.whileHeld(new RetractLeftHanger(m_hanger, true), true);
     }
 
     public static RobotContainer getInstance() {
