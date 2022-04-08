@@ -103,11 +103,13 @@ public class RobotContainer {
         final JoystickButton leftBumper = new JoystickButton(xboxController, XboxController.Button.kLeftBumper.value);        
         leftBumper.toggleWhenPressed(new Shoot(m_shooter, m_collection), true);
 
-        final JoystickButton buttonX = new JoystickButton(xboxController, XboxController.Button.kX.value);
-        buttonX.whenPressed(new ShootToggle(m_shooter), true);
+        if (Constants.TESTING) {
+            final JoystickButton buttonX = new JoystickButton(xboxController, XboxController.Button.kX.value);
+            buttonX.whenPressed(new ShootToggle(m_shooter), true);
 
-        final JoystickButton buttonB = new JoystickButton(xboxController, XboxController.Button.kB.value);
-        buttonB.toggleWhenPressed(new ShootDistance(m_shooter), true);
+            final JoystickButton buttonB = new JoystickButton(xboxController, XboxController.Button.kB.value);
+            buttonB.whenPressed(new ShootDistance(m_shooter), true);
+        }
 
 
         final JoystickButton h_leftStick = new JoystickButton(hangerController, XboxController.Button.kLeftStick.value);

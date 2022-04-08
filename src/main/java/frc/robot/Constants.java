@@ -10,6 +10,8 @@ constants are needed, to reduce verbosity.
 */
 
 public final class Constants {
+    public static final boolean TESTING = true;
+
     public static final double intakeSpeed = 14.5 * 1000;
     public static final double conveyorSpeed = 10 * 1000;
 
