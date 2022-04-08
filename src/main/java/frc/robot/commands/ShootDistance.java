@@ -14,7 +14,7 @@ public class ShootDistance extends CommandBase{
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        m_shooter.setMode("Distance");
+        m_shooter.setMode("Calibration");
     }
 
     // Called every time the scheduler runs while the command is scheduled.

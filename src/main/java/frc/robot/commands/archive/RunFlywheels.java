@@ -1,26 +1,27 @@
-package frc.robot.commands;
+package frc.robot.commands.archive;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Shooter;
 
 
-public class ReverseDriving extends CommandBase {
-    private final Drivetrain m_drivetrain;
+public class RunFlywheels extends CommandBase {
+    private final Shooter m_shooter;
     
-    public ReverseDriving(Drivetrain subsystem) {
-        m_drivetrain = subsystem;
-        addRequirements(m_drivetrain);
+    public RunFlywheels(Shooter subsystem) {
+        m_shooter = subsystem;
+        addRequirements(m_shooter);
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        m_drivetrain.toggleDrivingDirection();
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
-    public void execute() {}
+    public void execute() {
+        m_shooter.runFlywheels();
+    }
 
     // Called once the command ends or is interrupted.
     @Override
@@ -30,11 +31,12 @@ public class ReverseDriving extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean runsWhenDisabled() {
         return false;
     }
+    
 }

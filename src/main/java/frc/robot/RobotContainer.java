@@ -64,7 +64,6 @@ public class RobotContainer {
 
         // Configure default commands
         m_drivetrain.setDefaultCommand(new Drive(m_drivetrain));
-        m_shooter.setDefaultCommand(new RunFlywheels(m_shooter));
         
         // Configure autonomous sendable chooser and send to Shuffleboard
         m_chooser.addOption("Drive out auto", new AutoDriveOut(m_drivetrain, m_collection));
@@ -81,7 +80,7 @@ public class RobotContainer {
         matchTab.add("Limelight", limelightFeed).withWidget(BuiltInWidgets.kCameraStream)
             .withSize(5, 3)
             .withPosition(5, 1)
-            .withProperties(Map.of("show crosshair", false, "show controls", false));
+            .withProperties(Map.of("show crosshair", false, "show controls", false));;
     }
 
     /**

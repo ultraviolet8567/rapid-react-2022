@@ -76,7 +76,7 @@ public class Limelight extends SubsystemBase {
         v_offset.setDouble(vOffset);
         target_area.setDouble(area);
         calculated_distance.setDouble(upperHubDistance());
-        calculated_speed.setDouble(flywheelSpeeds()[0]);
+        calculated_speed.setDouble(calculatedSpeeds()[0] / 1000);
 
         hOffsetList.remove(0);
         hOffsetList.add(hOffset);
@@ -101,9 +101,9 @@ public class Limelight extends SubsystemBase {
         return distance - Constants.Limelight.ROBOT_H_OFFSET;
     }
 
-    public double[] flywheelSpeeds() {
+    public double[] calculatedSpeeds() {
         double x = hOffsetList.stream().mapToDouble(val -> val).average().orElse(0.0);
-        double big = Constants.Limelight.A * Math.pow(x, 2) + Constants.Limelight.B * x + Constants.Limelight.C;
+        double big = (Constants.Limelight.A * Math.pow(x, 2) + Constants.Limelight.B * x + Constants.Limelight.C) * 1000;
         double small = big * Constants.flywheelRatio;
 
         return new double[] { big, small };

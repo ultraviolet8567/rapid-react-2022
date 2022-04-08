@@ -27,8 +27,8 @@ public class Shooter extends SubsystemBase {
     private NetworkTableEntry sNumVelocity;
 
     private NetworkTableEntry velocitiesToggle;
-    private String velocity = "Off"; // "Lower hub";
-    private double distanceSpeed = Constants.fenderBigSpeed;
+    private Velocity velocity = Velocity.OFF;
+    private double calibrationSpeed = Constants.fenderBigSpeed;
 
     public Shooter() {
         bigFlywheel = new CANSparkMax(1, MotorType.kBrushless);
@@ -54,11 +54,11 @@ public class Shooter extends SubsystemBase {
             .withPosition(1, 3)
             .getEntry();
 
-        bSet = Shuffleboard.getTab("Shooter").add("Big flywheel set speed", distanceSpeed / 1000).withWidget(BuiltInWidgets.kNumberSlider)
+        bSet = Shuffleboard.getTab("Shooter").add("Big flywheel set speed", calibrationSpeed / 1000).withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0.5, "max", 70, "block increment", 0.01))
             .withPosition(6, 0)
             .getEntry();
-        sSet = Shuffleboard.getTab("Shooter").add("Small flywheel set speed", distanceSpeed * Constants.flywheelRatio / 1000).withWidget(BuiltInWidgets.kNumberSlider)
+        sSet = Shuffleboard.getTab("Shooter").add("Small flywheel set speed", calibrationSpeed * Constants.flywheelRatio / 1000).withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0.5, "max", 70, "block increment", 0.01))
             .withPosition(6, 1)
             .getEntry();
@@ -74,10 +74,12 @@ public class Shooter extends SubsystemBase {
         bNumVelocity.setNumber(bigFlywheel.getEncoder().getVelocity() / 1000);
         sNumVelocity.setNumber(smallFlywheel.getEncoder().getVelocity() / 1000);
 
-        velocitiesToggle.setString(velocity);
+        velocitiesToggle.setString(velocity.toString());
 
-        distanceSpeed = 1000 * bSet.getDouble(distanceSpeed);
-        sSet.setNumber(distanceSpeed * Constants.flywheelRatio / 1000);
+        calibrationSpeed = 1000 * bSet.getDouble(calibrationSpeed);
+        sSet.setNumber(calibrationSpeed * Constants.flywheelRatio / 1000);
+
+        runFlywheels();
     }
 
     // This method will be called once per scheduler run when in simulation
@@ -101,48 +103,76 @@ public class Shooter extends SubsystemBase {
         pid_controller.setReference(setPoint, type);
     }
 
-    public double[] flywheelSpeeds() {
-        if (velocity == "Lower hub") {
-            return new double[] { Constants.hubBigSpeed, Constants.hubSmallSpeed };
+    public void runFlywheels() {
+        double[] speeds;
+
+        switch (velocity) {
+            case LOWER_HUB:
+                speeds = new double[] { Constants.hubBigSpeed, Constants.hubSmallSpeed };
+                break;
+            case FENDER:
+                speeds = new double[] { Constants.fenderBigSpeed, Constants.fenderSmallSpeed };
+                break;
+            case CALIBRATION:
+                speeds = new double[] { calibrationSpeed, calibrationSpeed * Constants.flywheelRatio };
+                break;
+            case LIMELIGHT:
+                speeds = RobotContainer.getInstance().m_limelight.calculatedSpeeds();
+                break;
+            default:
+                speeds = new double[] { 0, 0 };
+                break;
         }
-        else if (velocity == "Fender") {
-            return new double[] { Constants.fenderBigSpeed, Constants.fenderSmallSpeed };
-        }
-        else if (velocity == "Distance") {
-            return new double[] { distanceSpeed, distanceSpeed * Constants.flywheelRatio };
-        }
-        else {
-            return new double[] { 0, 0 };
-        }
+
+        runBigFlywheel(speeds[0], ControlType.kVelocity);
+        runSmallFlywheel(speeds[1], ControlType.kVelocity);
     } 
 
     public void setMode(String mode) {
-        if (mode.equals("Off")) {
-            velocity = "Off";
-        }
-        else if (mode.equals("Lower hub")) {
-            velocity = "Lower hub";
-        }
-        else if (mode.equals("Fender")) {
-            velocity = "Fender";
-        }
-        else if (mode.equals("Distance")) {
-            velocity = "Distance";
+        switch (mode) {
+            case "Lower hub":
+                velocity = Velocity.LOWER_HUB;
+                break;
+            case "Fender":
+                velocity = Velocity.FENDER;
+                break;
+            case "Calibration":
+                velocity = Velocity.CALIBRATION;
+                break;
+            case "Limelight":
+                velocity = Velocity.LIMELIGHT;
+                break;
+            default:
+                velocity = Velocity.OFF;
+                break;
         }
     }
 
     public void toggle() {
-        if (velocity == "Off") {
-            velocity = "Lower hub";
+        switch (velocity) {
+            case OFF:
+                velocity = Velocity.LOWER_HUB;
+                break;
+            case LOWER_HUB:
+                velocity = Velocity.FENDER;
+                break;
+            case FENDER:
+                velocity = Velocity.CALIBRATION;
+                break;
+            case CALIBRATION:
+                velocity = Velocity.LIMELIGHT;
+                break;
+            default:
+                velocity = Velocity.OFF;
+                break;
         }
-        else if (velocity == "Lower hub") {
-            velocity = "Fender";
-        }
-        else if (velocity == "Fender") {
-            velocity = "Distance";
-        }
-        else if (velocity == "Distance") {
-            velocity = "Off";
-        }
+    }
+
+    public enum Velocity {
+        OFF,
+        LOWER_HUB,
+        FENDER,
+        CALIBRATION,
+        LIMELIGHT
     }
 }

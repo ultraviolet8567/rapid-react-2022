@@ -34,7 +34,7 @@ public class Shoot extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_collection.runConveyor(0, ControlType.kVelocity);
-        m_shooter.setMode("Off");
+        m_shooter.setMode("Off");;
     }
 
     // Returns true when the command should end.

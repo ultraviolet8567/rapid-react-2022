@@ -1,7 +1,5 @@
 package frc.robot.commands;
 
-import com.revrobotics.CANSparkMax.ControlType;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -40,24 +38,21 @@ public class AlignShooter extends CommandBase {
     @Override
     public void execute() {
         if (aligned) {
-            if (timer.get() >= 1) {
+            m_drivetrain.getDifferentialDrive().stopMotor();
+
+            if (timer.get() >= 1.5) {
                 RobotContainer.getInstance().getXboxController().setRumble(RumbleType.kLeftRumble, 0);
                 RobotContainer.getInstance().getXboxController().setRumble(RumbleType.kRightRumble, 0);
             }
             else if (timer.get() >= 0.5) {
-                double[] speeds = m_limelight.flywheelSpeeds();
-                m_shooter.runBigFlywheel(speeds[0], ControlType.kVelocity);
-                m_shooter.runSmallFlywheel(speeds[1], ControlType.kVelocity);
+                m_shooter.setMode("Limelight");
 
-                RobotContainer.getInstance().getXboxController().setRumble(RumbleType.kLeftRumble, 0.25);
-                RobotContainer.getInstance().getXboxController().setRumble(RumbleType.kRightRumble, 0.25);
+                RobotContainer.getInstance().getXboxController().setRumble(RumbleType.kLeftRumble, 0.5);
+                RobotContainer.getInstance().getXboxController().setRumble(RumbleType.kRightRumble, 0.5);
             }
-            
         }
         else {
             if (Math.abs(m_limelight.hOffset) < 1) {
-                m_drivetrain.getDifferentialDrive().stopMotor();
-
                 timer.start();
                 aligned = true;
             }
@@ -83,7 +78,7 @@ public class AlignShooter extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return timer.get() > 1;
+        return timer.get() > 1.5;
     }
 
     @Override
