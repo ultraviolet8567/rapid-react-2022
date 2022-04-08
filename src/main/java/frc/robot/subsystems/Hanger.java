@@ -31,7 +31,9 @@ public class Hanger extends SubsystemBase {
 
     public Hanger() {
         left = new CANSparkMax(9, MotorType.kBrushless);
+        left.setIdleMode(IdleMode.kBrake);
         right = new CANSparkMax(10, MotorType.kBrushless);
+        right.setIdleMode(IdleMode.kBrake);
 
         leftVelocity = Shuffleboard.getTab("Hanger").add("Left hanger", left.getEncoder().getVelocity()).withWidget(BuiltInWidgets.kGraph)
             .withProperties(Map.of("lower bound", -0.5, "upper bound", 10.5, "automatic bounds", false, "unit", "RPM"))
