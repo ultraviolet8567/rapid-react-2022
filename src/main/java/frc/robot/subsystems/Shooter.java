@@ -19,8 +19,8 @@ public class Shooter extends SubsystemBase {
     private CANSparkMax bigFlywheel;
     private CANSparkMax smallFlywheel;
 
-    // private NetworkTableEntry bVelocity;
-    // private NetworkTableEntry sVelocity;
+    private NetworkTableEntry bVelocity;
+    private NetworkTableEntry sVelocity;
     private NetworkTableEntry bSet;
     private NetworkTableEntry sSet;
     private NetworkTableEntry bNumVelocity;
@@ -28,34 +28,38 @@ public class Shooter extends SubsystemBase {
 
     private NetworkTableEntry velocitiesToggle;
     private String velocity = "Off"; // "Lower hub";
+    private double distanceSpeed = Constants.fenderBigSpeed;
 
     public Shooter() {
         bigFlywheel = new CANSparkMax(1, MotorType.kBrushless);
         bigFlywheel.setInverted(false);
         smallFlywheel = new CANSparkMax(2, MotorType.kBrushless);
 
-        // bVelocity = Shuffleboard.getTab("Shooter").add("Big flywheel", 0).withWidget(BuiltInWidgets.kGraph)
-        //     .withProperties(Map.of("lower bound", -0.5, "upper bound", 40.5, "automatic bounds", false, "unit", "RPM"))
-        //     .getEntry();
-        // sVelocity = Shuffleboard.getTab("Shooter").add("Small flywheel", 0).withWidget(BuiltInWidgets.kGraph)
-        //     .withProperties(Map.of("lower bound", -0.5, "upper bound", 40.5, "automatic bounds", false, "unit", "RPM"))
-        //     .getEntry();
+        bVelocity = Shuffleboard.getTab("Shooter").add("Big flywheel", 0).withWidget(BuiltInWidgets.kGraph)
+            .withProperties(Map.of("lower bound", -0.5, "upper bound", 70.5, "automatic bounds", false, "unit", "RPM"))
+            .getEntry();
+        sVelocity = Shuffleboard.getTab("Shooter").add("Small flywheel", 0).withWidget(BuiltInWidgets.kGraph)
+            .withProperties(Map.of("lower bound", -0.5, "upper bound", 70.5, "automatic bounds", false, "unit", "RPM"))
+            .getEntry();
 
-        // velocitiesToggle = Shuffleboard.getTab("Match Data").add("Shooting mode", "Lower hub").withWidget(BuiltInWidgets.kTextView)
-        //     .withSize(2, 1)
-        //     .withPosition(3, 0)
-        //     .getEntry();
+        velocitiesToggle = Shuffleboard.getTab("Match Data").add("Shooting mode", "Lower hub").withWidget(BuiltInWidgets.kTextView)
+            .withSize(2, 1)
+            .withPosition(3, 0)
+            .getEntry();
 
-        // updates number velocity values to shuffleboard
-        bNumVelocity = Shuffleboard.getTab("Shooter").add("Big V", 0).withWidget(BuiltInWidgets.kTextView).getEntry();
-        sNumVelocity = Shuffleboard.getTab("Shooter").add("Small V", 0).withWidget(BuiltInWidgets.kTextView).getEntry();
+        bNumVelocity = Shuffleboard.getTab("Shooter").add("Big V", 0).withWidget(BuiltInWidgets.kTextView)
+            .withPosition(0, 3)
+            .getEntry();
+        sNumVelocity = Shuffleboard.getTab("Shooter").add("Small V", 0).withWidget(BuiltInWidgets.kTextView)
+            .withPosition(1, 3)
+            .getEntry();
 
-        bSet = Shuffleboard.getTab("Shooter").add("Big flywheel set speed", Constants.distanceBigSpeed / 1000).withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 0.5, "max", 40, "block increment", 0.1))
+        bSet = Shuffleboard.getTab("Shooter").add("Big flywheel set speed", distanceSpeed / 1000).withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0.5, "max", 70, "block increment", 0.01))
             .withPosition(6, 0)
             .getEntry();
-        sSet = Shuffleboard.getTab("Shooter").add("Small flywheel set speed", Constants.distanceBigSpeed / 1000).withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 0.5, "max", 40, "block increment", 0.1))
+        sSet = Shuffleboard.getTab("Shooter").add("Small flywheel set speed", distanceSpeed * Constants.flywheelRatio / 1000).withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0.5, "max", 70, "block increment", 0.01))
             .withPosition(6, 1)
             .getEntry();
 
@@ -64,16 +68,16 @@ public class Shooter extends SubsystemBase {
     // This method will be called once per scheduler run
     @Override
     public void periodic() {
-        // bVelocity.setNumber(bigFlywheel.getEncoder().getVelocity() / 1000);
-        // sVelocity.setNumber(smallFlywheel.getEncoder().getVelocity() / 1000);
+        bVelocity.setNumber(bigFlywheel.getEncoder().getVelocity() / 1000);
+        sVelocity.setNumber(smallFlywheel.getEncoder().getVelocity() / 1000);
 
         bNumVelocity.setNumber(bigFlywheel.getEncoder().getVelocity() / 1000);
         sNumVelocity.setNumber(smallFlywheel.getEncoder().getVelocity() / 1000);
 
         velocitiesToggle.setString(velocity);
 
-        Constants.distanceBigSpeed = 1000 * bSet.getDouble(Constants.distanceBigSpeed / 1000);
-        Constants.distanceSmallSpeed = 1000 * sSet.getDouble(Constants.distanceSmallSpeed / 1000);
+        distanceSpeed = 1000 * bSet.getDouble(distanceSpeed);
+        sSet.setNumber(distanceSpeed * Constants.flywheelRatio / 1000);
     }
 
     // This method will be called once per scheduler run when in simulation
@@ -98,48 +102,47 @@ public class Shooter extends SubsystemBase {
     }
 
     public double[] flywheelSpeeds() {
-        // Fender
-        if (velocity == "Fender") {
+        if (velocity == "Lower hub") {
+            return new double[] { Constants.hubBigSpeed, Constants.hubSmallSpeed };
+        }
+        else if (velocity == "Fender") {
             return new double[] { Constants.fenderBigSpeed, Constants.fenderSmallSpeed };
         }
         else if (velocity == "Distance") {
-            return new double[] { Constants.distanceBigSpeed, Constants.distanceSmallSpeed };
+            return new double[] { distanceSpeed, distanceSpeed * Constants.flywheelRatio };
         }
-        else if (velocity == "Off") {
-            return new double[] { 0, 0 };
-        }
-        // Lower hub
         else {
-            return new double[] { Constants.hubBigSpeed, Constants.hubSmallSpeed };
+            return new double[] { 0, 0 };
         }
     } 
 
     public void setMode(String mode) {
-        if (mode == "Fender") {
+        if (mode.equals("Off")) {
+            velocity = "Off";
+        }
+        else if (mode.equals("Lower hub")) {
+            velocity = "Lower hub";
+        }
+        else if (mode.equals("Fender")) {
             velocity = "Fender";
         }
-        else if (mode == "Distance") {
+        else if (mode.equals("Distance")) {
             velocity = "Distance";
-        }
-        // Lower hub
-        else {
-            velocity = "Lower hub";
         }
     }
 
     public void toggle() {
-        if (velocity == "Fender") {
+        if (velocity == "Off") {
             velocity = "Lower hub";
         }
         else if (velocity == "Lower hub") {
+            velocity = "Fender";
+        }
+        else if (velocity == "Fender") {
             velocity = "Distance";
         }
         else if (velocity == "Distance") {
             velocity = "Off";
-        }
-        // Lower hub
-        else {
-            velocity = "Fender";
         }
     }
 }

@@ -3,10 +3,10 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
-public class ShootFender extends CommandBase{
+public class ShootToggle extends CommandBase{
     private final Shooter m_shooter;
 
-    public ShootFender(Shooter subsystem) {
+    public ShootToggle(Shooter subsystem) {
         m_shooter = subsystem;
         addRequirements(m_shooter);
     }
@@ -15,7 +15,6 @@ public class ShootFender extends CommandBase{
     @Override
     public void initialize() {
         m_shooter.toggle();
-        // m_shooter.setMode("Fender");
     }
 
     // Called every time the scheduler runs while the command is scheduled.
