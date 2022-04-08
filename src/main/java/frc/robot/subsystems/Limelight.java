@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import edu.wpi.first.networktables.NetworkTable;
@@ -18,6 +20,7 @@ public class Limelight extends SubsystemBase {
 
     public boolean validTargets = false;
     public double hOffset = 0; // -29.8 degrees to 29.8 degrees
+    public List<Double> hOffsetList = new ArrayList<>(List.of(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
     public double vOffset = 0; // -24.85 degrees to 24.85 degrees
     public double area = 0; // 0% of image to 100% of image
 
@@ -73,7 +76,10 @@ public class Limelight extends SubsystemBase {
         v_offset.setDouble(vOffset);
         target_area.setDouble(area);
         calculated_distance.setDouble(upperHubDistance());
-        calculated_speed.setDouble(flywheelSpeed()[0]);
+        calculated_speed.setDouble(flywheelSpeeds()[0]);
+
+        hOffsetList.remove(0);
+        hOffsetList.add(hOffset);
     }
 
     // This method will be called once per scheduler run when in simulation
@@ -95,21 +101,31 @@ public class Limelight extends SubsystemBase {
         return distance - Constants.Limelight.ROBOT_H_OFFSET;
     }
 
-    public double[] flywheelSpeed() {
-        double x = hOffset;
+    public double[] flywheelSpeeds() {
+        double x = hOffsetList.stream().mapToDouble(val -> val).average().orElse(0.0);
         double big = Constants.Limelight.A * Math.pow(x, 2) + Constants.Limelight.B * x + Constants.Limelight.C;
         double small = big * Constants.flywheelRatio;
 
-        // double difference = Double.MAX_VALUE;
-        // double big = 0;
-
-        // for (double key : Constants.Limelight.ANGLE_MAP.keySet()) {
-        //     if (Math.abs(key - vOffset) < difference) {
-        //         difference = Math.abs(key - vOffset);
-        //         big = Constants.Limelight.ANGLE_MAP.get(key);
-        //     }
-        // }
-
         return new double[] { big, small };
     }
+
+    // public static List<Double> StatisticalOutLierAnalysis(List<Double> allNumbers)
+    // {
+    //     if (allNumbers.size() == 0)
+    //         return null;
+
+    //     List<Double> normalNumbers = new List<Double>();
+    //     List<Double> outLierNumbers = new List<Double>();
+    //     double avg = allNumbers.Average();
+    //     double standardDeviation = Math.sqrt(allNumbers.average(v => Math.pow(v - avg, 2)));
+    //     for (Double number : allNumbers)
+    //     {
+    //         if ((Math.abs(number - avg)) > (2 * standardDeviation))
+    //             outLierNumbers.add(number);
+    //         else
+    //             normalNumbers.add(number);
+    //     }
+
+    //     return normalNumbers;
+    // }
 }

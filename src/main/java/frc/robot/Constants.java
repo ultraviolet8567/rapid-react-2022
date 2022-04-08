@@ -1,7 +1,5 @@
 package frc.robot;
 
-import java.util.Map;
-
 /*
 The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
 constants. This class should not be used for any other purpose.  All constants should be
@@ -30,11 +28,6 @@ public final class Constants {
     public static final double flywheelRatio = 833.0 / 530.0;
 
     public static final class Limelight {
-        // public static final Map<Double, Double> ANGLE_MAP
-        //     = Map.of(7.69, 10.60,
-        //             -14.53, 13.50
-        // );
-
         // Flywheel speed equation coefficients
         public static final double A = 0.0015;
         public static final double B = -0.112;
