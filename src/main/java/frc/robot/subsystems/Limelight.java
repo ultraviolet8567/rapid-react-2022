@@ -26,6 +26,7 @@ public class Limelight extends SubsystemBase {
     private NetworkTableEntry v_offset; 
     private NetworkTableEntry target_area;
     private NetworkTableEntry calculated_distance;
+    private NetworkTableEntry calculated_speed;
     
 
     public Limelight() {
@@ -49,6 +50,10 @@ public class Limelight extends SubsystemBase {
             .withSize(2, 1)
             .withPosition(8, 1)
             .getEntry();
+        calculated_speed = Shuffleboard.getTab("Shooter").add("Calculated big velocity", 0).withWidget(BuiltInWidgets.kTextView)
+            .withSize(2, 1)
+            .withPosition(6, 2)
+            .getEntry();
 
         limelight.getEntry("ledMode").setDouble(0);
     }
@@ -68,6 +73,7 @@ public class Limelight extends SubsystemBase {
         v_offset.setDouble(vOffset);
         target_area.setDouble(area);
         calculated_distance.setDouble(upperHubDistance());
+        calculated_speed.setDouble(flywheelSpeed()[0]);
     }
 
     // This method will be called once per scheduler run when in simulation
@@ -90,17 +96,19 @@ public class Limelight extends SubsystemBase {
     }
 
     public double[] flywheelSpeed() {
-        double difference = Double.MAX_VALUE;
-        double big = 0;
-
-        for (double key : Constants.Limelight.ANGLE_MAP.keySet()) {
-            if (Math.abs(key - vOffset) < difference) {
-                difference = Math.abs(key - vOffset);
-                big = Constants.Limelight.ANGLE_MAP.get(key);
-            }
-        }
-
+        double x = hOffset;
+        double big = Constants.Limelight.A * Math.pow(x, 2) + Constants.Limelight.B * x + Constants.Limelight.C;
         double small = big * Constants.flywheelRatio;
+
+        // double difference = Double.MAX_VALUE;
+        // double big = 0;
+
+        // for (double key : Constants.Limelight.ANGLE_MAP.keySet()) {
+        //     if (Math.abs(key - vOffset) < difference) {
+        //         difference = Math.abs(key - vOffset);
+        //         big = Constants.Limelight.ANGLE_MAP.get(key);
+        //     }
+        // }
 
         return new double[] { big, small };
     }

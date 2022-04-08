@@ -30,10 +30,15 @@ public final class Constants {
     public static final double flywheelRatio = 833.0 / 530.0;
 
     public static final class Limelight {
-        public static final Map<Double, Double> ANGLE_MAP
-            = Map.of(7.69, 10.60,
-                    -14.53, 13.50
-        );
+        // public static final Map<Double, Double> ANGLE_MAP
+        //     = Map.of(7.69, 10.60,
+        //             -14.53, 13.50
+        // );
+
+        // Flywheel speed equation coefficients
+        public static final double A = 0.0015;
+        public static final double B = -0.112;
+        public static final double C = 11.4;
 
         // Upper hub height in inches
         public static final double UPPER_HUB_HEIGHT = 104.0;

@@ -75,6 +75,9 @@
       }
     },
     "Shuffleboard": {
+      "Hanger": {
+        "open": true
+      },
       "open": true
     },
     "SmartDashboard": {
