@@ -23,8 +23,11 @@ public class Hanger extends SubsystemBase {
 
     private NetworkTableEntry leftVelocity;
     private NetworkTableEntry rightVelocity;
+    private NetworkTableEntry hangerSpeed;
+    private NetworkTableEntry idleMode;
 
     private boolean fastMode = true;
+    private boolean highBar = false;
 
     public Hanger() {
         left = new CANSparkMax(9, MotorType.kBrushless);
@@ -36,6 +39,13 @@ public class Hanger extends SubsystemBase {
         rightVelocity = Shuffleboard.getTab("Hanger").add("Right hanger", right.getEncoder().getVelocity()).withWidget(BuiltInWidgets.kGraph)
             .withProperties(Map.of("lower bound", -0.5, "upper bound", 10.5, "automatic bounds", false, "unit", "RPM"))
             .getEntry();
+        
+        idleMode = Shuffleboard.getTab("Hanger").add("HIGH BAR", highBar).withWidget(BuiltInWidgets.kBooleanBox)
+            .withPosition(6, 0)
+            .getEntry();
+        hangerSpeed = Shuffleboard.getTab("Hanger").add("Fast mode", fastMode).withWidget(BuiltInWidgets.kBooleanBox)
+            .withPosition(6, 1)
+            .getEntry();
     }
 
     // This method will be called once per scheduler run
@@ -43,6 +53,9 @@ public class Hanger extends SubsystemBase {
     public void periodic() {
         leftVelocity.setNumber(left.getEncoder().getVelocity() / 1000);
         rightVelocity.setNumber(right.getEncoder().getVelocity() / 1000);
+
+        hangerSpeed.setBoolean(fastMode);
+        idleMode.setBoolean(highBar);
     }
 
     // This method will be called once per scheduler run when in simulation
@@ -91,13 +104,15 @@ public class Hanger extends SubsystemBase {
     }
 
     public void toggleIdleMode() {
-        if (left.getIdleMode().equals(IdleMode.kCoast)) {
-            left.setIdleMode(IdleMode.kBrake);
-            right.setIdleMode(IdleMode.kBrake);
-        }
-        else {
+        highBar = !highBar;
+
+        if (highBar) {
             left.setIdleMode(IdleMode.kCoast);
             right.setIdleMode(IdleMode.kCoast);
+        }
+        else {
+            left.setIdleMode(IdleMode.kBrake);
+            right.setIdleMode(IdleMode.kBrake);
         }
     }
 }

@@ -6,11 +6,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Hanger;
 
-public class BarToggle extends CommandBase {
+public class IdleModeToggle extends CommandBase {
     private final Hanger m_hanger;
     private Timer timer;
 
-    public BarToggle(Hanger subsystem) {
+    public IdleModeToggle(Hanger subsystem) {
         m_hanger = subsystem;
         addRequirements(m_hanger);
     }
@@ -23,8 +23,8 @@ public class BarToggle extends CommandBase {
         
         m_hanger.toggleIdleMode();
 
-        RobotContainer.getInstance().getXboxController().setRumble(RumbleType.kLeftRumble, 0.25);
-        RobotContainer.getInstance().getXboxController().setRumble(RumbleType.kRightRumble, 0.25);
+        RobotContainer.getInstance().getXboxController().setRumble(RumbleType.kLeftRumble, 0.5);
+        RobotContainer.getInstance().getXboxController().setRumble(RumbleType.kRightRumble, 0.5);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -42,7 +42,7 @@ public class BarToggle extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return timer.get() == 0.25;
+        return timer.get() >= 1;
     }
 
     @Override

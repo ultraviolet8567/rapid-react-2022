@@ -114,7 +114,7 @@ public class RobotContainer {
         h_leftStick.whenPressed(new HangerToggle(m_hanger), true);
 
         final JoystickButton h_rightStick = new JoystickButton(hangerController, XboxController.Button.kRightStick.value);
-        h_rightStick.whenPressed(new BarToggle(m_hanger), true);
+        h_rightStick.whenPressed(new IdleModeToggle(m_hanger), true);
         
         final JoystickButton h_leftBumper = new JoystickButton(hangerController, XboxController.Button.kLeftBumper.value);
         h_leftBumper.whileHeld(new ExtendLeftHanger(m_hanger, false), true);
