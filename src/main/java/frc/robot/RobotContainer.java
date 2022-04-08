@@ -82,7 +82,6 @@ public class RobotContainer {
             .withSize(5, 3)
             .withPosition(5, 1)
             .withProperties(Map.of("show crosshair", false, "show controls", false));
-
     }
 
     /**
@@ -114,6 +113,9 @@ public class RobotContainer {
 
         final JoystickButton h_leftStick = new JoystickButton(hangerController, XboxController.Button.kLeftStick.value);
         h_leftStick.whenPressed(new HangerToggle(m_hanger), true);
+
+        final JoystickButton h_rightStick = new JoystickButton(hangerController, XboxController.Button.kRightStick.value);
+        h_rightStick.whenPressed(new BarToggle(m_hanger), true);
         
         final JoystickButton h_leftBumper = new JoystickButton(hangerController, XboxController.Button.kLeftBumper.value);
         h_leftBumper.whileHeld(new ExtendLeftHanger(m_hanger, false), true);

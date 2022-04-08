@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxPIDController;
 
@@ -87,5 +88,16 @@ public class Hanger extends SubsystemBase {
     
     public void stopRightHanger() {
         right.stopMotor();
+    }
+
+    public void toggleIdleMode() {
+        if (left.getIdleMode().equals(IdleMode.kCoast)) {
+            left.setIdleMode(IdleMode.kBrake);
+            right.setIdleMode(IdleMode.kBrake);
+        }
+        else {
+            left.setIdleMode(IdleMode.kCoast);
+            right.setIdleMode(IdleMode.kCoast);
+        }
     }
 }
