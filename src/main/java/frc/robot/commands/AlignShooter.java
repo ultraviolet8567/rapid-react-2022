@@ -33,17 +33,20 @@ public class AlignShooter extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        if (!m_limelight.validTargets || Math.abs(m_limelight.hOffset) < 2) {
+        if (Math.abs(m_limelight.hOffset) < 1) {
             m_drivetrain.stopMotors();
             aligned = true;
         }
         else {
-            double turn = m_limelight.hOffset / 50;
+            double kP = 0.02;
+            double min = 0.2;
+            double turn = kP * m_limelight.hOffset;
+
             if (m_limelight.hOffset > 0) {
-                turn = turn + 0.2;
+                turn = turn + min;
             }
             else {
-                turn = turn - 0.2;
+                turn = turn - min;
             }
             m_drivetrain.getDifferentialDrive().arcadeDrive(0.0, turn);
         }

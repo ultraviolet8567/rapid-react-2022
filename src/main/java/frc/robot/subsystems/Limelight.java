@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import edu.wpi.first.networktables.NetworkTable;
@@ -27,19 +26,6 @@ public class Limelight extends SubsystemBase {
     private NetworkTableEntry v_offset; 
     private NetworkTableEntry target_area;
     private NetworkTableEntry calculated_distance;
-
-    // Upper hub height in inches
-    private final double UPPER_HUB_HEIGHT = 104;
-    // Center of the Limelight lens' height above ground in inches
-    private final double CAMERA_HEIGHT = 10;
-    // Camera angle in degrees (here we set it to radians to use in code)
-    private final double CAMERA_ANGLE = 60;
-    // Horizontal and vertical offset from the camera to the shooter
-    private final double ROBOT_H_OFFSET = 0;
-
-    private final Map<Double, Double[]> SPEEDS_MAP = new HashMap<Double, Double[]>() {{
-        put(40.0, new Double[] { Constants.distanceBigSpeed, Constants.distanceSmallSpeed });
-    }};
     
 
     public Limelight() {
@@ -93,27 +79,29 @@ public class Limelight extends SubsystemBase {
 
     // Returns the angle of the upper hub in degrees
     public double upperHubAngle() {
-        return CAMERA_ANGLE + vOffset;
+        return Constants.Limelight.CAMERA_ANGLE + vOffset;
     }
 
     public double upperHubDistance() {
         double angleToGoal = upperHubAngle() * (Math.PI / 180.0);
-        double distance = (UPPER_HUB_HEIGHT - CAMERA_HEIGHT) / Math.tan(angleToGoal);
+        double distance = (Constants.Limelight.UPPER_HUB_HEIGHT - Constants.Limelight.CAMERA_HEIGHT) / Math.tan(angleToGoal);
 
-        return distance - ROBOT_H_OFFSET;
+        return distance - Constants.Limelight.ROBOT_H_OFFSET;
     }
 
-    public Double[] flywheelSpeeds() {
-        Double difference = Double.MAX_VALUE;
-        Double[] speeds = null;
+    public double[] flywheelSpeed() {
+        double difference = Double.MAX_VALUE;
+        double big = 0;
 
-        for (Double key : SPEEDS_MAP.keySet()) {
+        for (double key : Constants.Limelight.ANGLE_MAP.keySet()) {
             if (Math.abs(key - vOffset) < difference) {
                 difference = Math.abs(key - vOffset);
-                speeds = SPEEDS_MAP.get(key);
+                big = Constants.Limelight.ANGLE_MAP.get(key);
             }
         }
 
-        return speeds;
+        double small = big * Constants.flywheelRatio;
+
+        return new double[] { big, small };
     }
 }
