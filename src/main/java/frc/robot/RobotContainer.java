@@ -130,6 +130,7 @@ public class RobotContainer {
         final JoystickButton h_startButton = new JoystickButton(hangerController, XboxController.Button.kStart.value);
         h_startButton.whileHeld(new RetractRightHanger(m_hanger), true);
 
+        // Extend or retract both hanger arms together
         final JoystickButton h_buttonY = new JoystickButton(hangerController, XboxController.Button.kY.value);
         h_buttonY.whileHeld(new ExtendLeftHanger(m_hanger, true), true);
 
@@ -143,6 +144,10 @@ public class RobotContainer {
 
     public XboxController getXboxController() {
         return xboxController;
+    }
+
+    public XboxController getHangerController() {
+        return hangerController;
     }
 
     /**

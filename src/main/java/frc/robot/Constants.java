@@ -21,8 +21,8 @@ public final class Constants {
     public static final double hubBigSpeed = 5 * 1000;
     public static final double hubSmallSpeed = 11.5 * 1000;
     
-    public static final double fenderBigSpeed = 9 * 1000;
-    public static final double fenderSmallSpeed = 11 * 1000;
+    public static final double fenderBigSpeed = 9.89 * 1000;
+    public static final double fenderSmallSpeed = 15.55 * 1000;
     
     public static final double distanceBigSpeed = 11 * 1000;
     public static final double distanceSmallSpeed = 11 * 1000;
@@ -31,9 +31,14 @@ public final class Constants {
 
     public static final class Limelight {
         // Flywheel speed equation coefficients
-        public static final double A = 0.0015;
-        public static final double B = -0.112;
-        public static final double C = 11.4;
+        public static final double A = -0.0548;
+        public static final double B = 1.45;
+        public static final double C = -76.7;
+        public static final double D = 11600;
+        public static final double A2 = 1.08;
+        public static final double B2 = -105;
+        public static final double C2 = 11400;
+
 
         // Upper hub height in inches
         public static final double UPPER_HUB_HEIGHT = 104.0;

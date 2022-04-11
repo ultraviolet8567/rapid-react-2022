@@ -23,6 +23,7 @@ public class Shoot extends CommandBase {
     @Override
     public void initialize() {
         m_collection.runConveyor(Constants.conveyorSpeed, ControlType.kVelocity);
+        // m_shooter.setMode("Fender");
     }
 
     // Called every time the scheduler runs while the command is scheduled.

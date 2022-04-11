@@ -32,27 +32,26 @@ public class AutoTwoBall extends CommandBase {
         timer.start();
 
         m_collection.runIntake(-Constants.intakeSpeed / 10, ControlType.kVelocity);
-        m_shooter.runBigFlywheel(Constants.fenderBigSpeed, ControlType.kVelocity);
-        m_shooter.runSmallFlywheel(Constants.fenderSmallSpeed * 1.25, ControlType.kVelocity);
     }
 // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        if (timer.get() > 1) {
-            m_collection.runIntake(Constants.intakeSpeed, ControlType.kVelocity);
-            m_drivetrain.getDifferentialDrive().arcadeDrive(0.5, 0);
-        }
-        if (timer.get() >= 6) {
-            m_drivetrain.stopMotors();
-        }
-        if (timer.get() >= 6.25) {
-            m_drivetrain.getDifferentialDrive().arcadeDrive(-0.5, 0);
-        }
-        if (timer.get() >= 11.25) {
-            m_drivetrain.stopMotors();
-        }
         if (timer.get() >= 11.75) {
             m_collection.runConveyor(Constants.conveyorSpeed * 0.9, ControlType.kVelocity);
+        }
+        else if (timer.get() >= 11.25) {
+            m_drivetrain.stopMotors();
+        }
+        else if (timer.get() >= 6.25) {
+            m_shooter.setMode("Fender");
+            m_drivetrain.getDifferentialDrive().arcadeDrive(-0.5, 0);
+        }
+        else if (timer.get() >= 6) {
+            m_drivetrain.stopMotors();
+        }
+        else if (timer.get() > 1) {
+            m_collection.runIntake(Constants.intakeSpeed, ControlType.kVelocity);
+            m_drivetrain.getDifferentialDrive().arcadeDrive(0.5, 0);
         }
     }
 

@@ -23,8 +23,8 @@ public class IdleModeToggle extends CommandBase {
         
         m_hanger.toggleIdleMode();
 
-        RobotContainer.getInstance().getXboxController().setRumble(RumbleType.kLeftRumble, 0.5);
-        RobotContainer.getInstance().getXboxController().setRumble(RumbleType.kRightRumble, 0.5);
+        RobotContainer.getInstance().getHangerController().setRumble(RumbleType.kLeftRumble, 0.5);
+        RobotContainer.getInstance().getHangerController().setRumble(RumbleType.kRightRumble, 0.5);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -35,8 +35,8 @@ public class IdleModeToggle extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        RobotContainer.getInstance().getXboxController().setRumble(RumbleType.kLeftRumble, 0);
-        RobotContainer.getInstance().getXboxController().setRumble(RumbleType.kRightRumble, 0);
+        RobotContainer.getInstance().getHangerController().setRumble(RumbleType.kLeftRumble, 0);
+        RobotContainer.getInstance().getHangerController().setRumble(RumbleType.kRightRumble, 0);
     }
 
     // Returns true when the command should end.

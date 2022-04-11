@@ -103,29 +103,10 @@ public class Limelight extends SubsystemBase {
 
     public double[] calculatedSpeeds() {
         double x = hOffsetList.stream().mapToDouble(val -> val).average().orElse(0.0);
-        double big = (Constants.Limelight.A * Math.pow(x, 2) + Constants.Limelight.B * x + Constants.Limelight.C) * 1000;
+        // double big = Constants.Limelight.A2 * Math.pow(x, 2) + Constants.Limelight.B2 * x + Constants.Limelight.C2;
+        double big = Constants.Limelight.A * Math.pow(x, 3) + Constants.Limelight.B * Math.pow(x, 2) + Constants.Limelight.C * x + Constants.Limelight.D;
         double small = big * Constants.flywheelRatio;
 
         return new double[] { big, small };
     }
-
-    // public static List<Double> StatisticalOutLierAnalysis(List<Double> allNumbers)
-    // {
-    //     if (allNumbers.size() == 0)
-    //         return null;
-
-    //     List<Double> normalNumbers = new List<Double>();
-    //     List<Double> outLierNumbers = new List<Double>();
-    //     double avg = allNumbers.Average();
-    //     double standardDeviation = Math.sqrt(allNumbers.average(v => Math.pow(v - avg, 2)));
-    //     for (Double number : allNumbers)
-    //     {
-    //         if ((Math.abs(number - avg)) > (2 * standardDeviation))
-    //             outLierNumbers.add(number);
-    //         else
-    //             normalNumbers.add(number);
-    //     }
-
-    //     return normalNumbers;
-    // }
 }

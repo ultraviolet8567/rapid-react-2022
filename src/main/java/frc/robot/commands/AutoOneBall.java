@@ -44,8 +44,7 @@ public class AutoOneBall extends CommandBase {
             
         m_collection.runIntake(-Constants.intakeSpeed / 10, ControlType.kVelocity);
 
-        m_shooter.runBigFlywheel(Constants.fenderBigSpeed, ControlType.kVelocity);
-        m_shooter.runSmallFlywheel(Constants.fenderSmallSpeed * 1.25, ControlType.kVelocity);
+        m_shooter.setMode("Fender");
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -56,7 +55,7 @@ public class AutoOneBall extends CommandBase {
         if (timer.get() > 2) {
             m_collection.runIntake(0, ControlType.kVelocity);
         }
-        if (timer.get() > 5) {
+        if (timer.get() > 3) {
             m_collection.runConveyor(Constants.conveyorSpeed, ControlType.kVelocity);
         }
         if (timer.get() > 10) {

@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import com.revrobotics.CANSparkMax.ControlType;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -39,20 +41,19 @@ public class AlignShooter extends CommandBase {
     public void execute() {
         if (aligned) {
             m_drivetrain.getDifferentialDrive().stopMotor();
-
-            if (timer.get() >= 1.5) {
-                RobotContainer.getInstance().getXboxController().setRumble(RumbleType.kLeftRumble, 0);
-                RobotContainer.getInstance().getXboxController().setRumble(RumbleType.kRightRumble, 0);
+            if (timer.get() >= 0.75) {
+                RobotContainer.getInstance().getXboxController().setRumble(RumbleType.kLeftRumble, 0.75);
+                RobotContainer.getInstance().getXboxController().setRumble(RumbleType.kRightRumble, 0.75);
             }
-            else if (timer.get() >= 0.5) {
+            else if (0.2 <= timer.get() && timer.get() <= 0.4) {
                 m_shooter.setMode("Limelight");
-
-                RobotContainer.getInstance().getXboxController().setRumble(RumbleType.kLeftRumble, 0.5);
-                RobotContainer.getInstance().getXboxController().setRumble(RumbleType.kRightRumble, 0.5);
+                double[] speeds = m_limelight.calculatedSpeeds();
+                m_shooter.runBigFlywheel(speeds[0], ControlType.kVelocity);
+                m_shooter.runSmallFlywheel(speeds[1], ControlType.kVelocity);
             }
         }
         else {
-            if (Math.abs(m_limelight.hOffset) < 1) {
+            if (Math.abs(m_limelight.hOffset) < 0.5) {
                 timer.start();
                 aligned = true;
             }
@@ -73,6 +74,9 @@ public class AlignShooter extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_drivetrain.getDifferentialDrive().stopMotor();
+
+        RobotContainer.getInstance().getXboxController().setRumble(RumbleType.kLeftRumble, 0);
+        RobotContainer.getInstance().getXboxController().setRumble(RumbleType.kRightRumble, 0);
     }
 
     // Returns true when the command should end.

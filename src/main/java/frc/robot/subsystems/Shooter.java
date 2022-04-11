@@ -104,28 +104,30 @@ public class Shooter extends SubsystemBase {
     }
 
     public void runFlywheels() {
-        double[] speeds;
+        if (velocity != Velocity.LIMELIGHT) {
+            double[] speeds;
 
-        switch (velocity) {
-            case LOWER_HUB:
-                speeds = new double[] { Constants.hubBigSpeed, Constants.hubSmallSpeed };
-                break;
-            case FENDER:
-                speeds = new double[] { Constants.fenderBigSpeed, Constants.fenderSmallSpeed };
-                break;
-            case CALIBRATION:
-                speeds = new double[] { calibrationSpeed, calibrationSpeed * Constants.flywheelRatio };
-                break;
-            case LIMELIGHT:
-                speeds = RobotContainer.getInstance().m_limelight.calculatedSpeeds();
-                break;
-            default:
-                speeds = new double[] { 0, 0 };
-                break;
+            switch (velocity) {
+                case LOWER_HUB:
+                    speeds = new double[] { Constants.hubBigSpeed, Constants.hubSmallSpeed };
+                    break;
+                case FENDER:
+                    speeds = new double[] { Constants.fenderBigSpeed, Constants.fenderSmallSpeed };
+                    break;
+                case CALIBRATION:
+                    speeds = new double[] { calibrationSpeed, calibrationSpeed * Constants.flywheelRatio };
+                    break;
+                case LIMELIGHT:
+                    speeds = RobotContainer.getInstance().m_limelight.calculatedSpeeds();
+                    break;
+                default:
+                    speeds = new double[] { 0, 0 };
+                    break;
+            }
+
+            runBigFlywheel(speeds[0], ControlType.kVelocity);
+            runSmallFlywheel(speeds[1], ControlType.kVelocity);
         }
-
-        runBigFlywheel(speeds[0], ControlType.kVelocity);
-        runSmallFlywheel(speeds[1], ControlType.kVelocity);
     } 
 
     public void setMode(String mode) {
