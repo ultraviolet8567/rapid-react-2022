@@ -15,7 +15,9 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.RobotMode;
 
 
 public class Collection extends SubsystemBase {
@@ -42,14 +44,16 @@ public class Collection extends SubsystemBase {
         detectorTop = new DigitalInput(0);
         detectorBottom = new DigitalInput(1);
 
-        intakeVelocity = Shuffleboard.getTab("Collection").add("Intake", intake.getEncoder().getVelocity()).withWidget(BuiltInWidgets.kGraph)
-            .withProperties(Map.of("lower bound", -0.5, "upper bound", 15.5, "automatic bounds", false, "unit", "RPM"))
-            .withPosition(0, 0)
-            .getEntry();
-        conveyorVelocity = Shuffleboard.getTab("Collection").add("Conveyor", conveyor.getEncoder().getVelocity()).withWidget(BuiltInWidgets.kGraph)
-            .withProperties(Map.of("lower bound", -0.5, "upper bound", 15.5, "automatic bounds", false, "unit", "RPM"))
-            .withPosition(3, 0)
-            .getEntry();
+        if (Constants.MODE == RobotMode.TESTING) {
+            intakeVelocity = Shuffleboard.getTab("Collection").add("Intake", intake.getEncoder().getVelocity()).withWidget(BuiltInWidgets.kGraph)
+                .withProperties(Map.of("lower bound", -0.5, "upper bound", 15.5, "automatic bounds", false, "unit", "RPM"))
+                .withPosition(0, 0)
+                .getEntry();
+            conveyorVelocity = Shuffleboard.getTab("Collection").add("Conveyor", conveyor.getEncoder().getVelocity()).withWidget(BuiltInWidgets.kGraph)
+                .withProperties(Map.of("lower bound", -0.5, "upper bound", 15.5, "automatic bounds", false, "unit", "RPM"))
+                .withPosition(3, 0)
+                .getEntry();
+        }
 
         ShuffleboardLayout sensors = Shuffleboard.getTab("Collection").getLayout("Sensors", BuiltInLayouts.kList)
             .withSize(2, 2);
@@ -65,8 +69,10 @@ public class Collection extends SubsystemBase {
     // This method will be called once per scheduler run
     @Override
     public void periodic() {
-        intakeVelocity.setNumber(intake.getEncoder().getVelocity() / 1000);
-        conveyorVelocity.setNumber(conveyor.getEncoder().getVelocity() / 1000);
+        if (Constants.MODE == RobotMode.TESTING) {
+            intakeVelocity.setNumber(intake.getEncoder().getVelocity() / 1000);
+            conveyorVelocity.setNumber(conveyor.getEncoder().getVelocity() / 1000);
+        }
         detectedTop.setBoolean(ballTop());
         detectedBottom.setBoolean(ballBottom());
 

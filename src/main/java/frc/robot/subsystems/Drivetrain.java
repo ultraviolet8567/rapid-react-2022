@@ -46,8 +46,6 @@ public class Drivetrain extends SubsystemBase {
         driveMode.setDefaultOption("Split control", "Split control");
         driveMode.addOption("Tank drive", "Tank drive");
 
-        Shuffleboard.getTab("Drive Settings").add("Differential drive", differentialDrive).withWidget(BuiltInWidgets.kDifferentialDrive)
-            .withSize(4, 3);
         Shuffleboard.getTab("Match Data").add("Drive mode", driveMode).withWidget(BuiltInWidgets.kComboBoxChooser)
             .withSize(2, 1)
             .withPosition(5, 0);

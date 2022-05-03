@@ -9,11 +9,14 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxPIDController;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.RobotMode;
 
 
 public class Hanger extends SubsystemBase {
@@ -34,27 +37,32 @@ public class Hanger extends SubsystemBase {
         left.setIdleMode(IdleMode.kBrake);
         right = new CANSparkMax(10, MotorType.kBrushless);
         right.setIdleMode(IdleMode.kBrake);
-
-        leftVelocity = Shuffleboard.getTab("Hanger").add("Left hanger", left.getEncoder().getVelocity()).withWidget(BuiltInWidgets.kGraph)
-            .withProperties(Map.of("lower bound", -0.5, "upper bound", 10.5, "automatic bounds", false, "unit", "RPM"))
-            .getEntry();
-        rightVelocity = Shuffleboard.getTab("Hanger").add("Right hanger", right.getEncoder().getVelocity()).withWidget(BuiltInWidgets.kGraph)
-            .withProperties(Map.of("lower bound", -0.5, "upper bound", 10.5, "automatic bounds", false, "unit", "RPM"))
-            .getEntry();
         
-        idleMode = Shuffleboard.getTab("Hanger").add("HIGH BAR", highBar).withWidget(BuiltInWidgets.kBooleanBox)
-            .withPosition(6, 0)
-            .getEntry();
-        hangerSpeed = Shuffleboard.getTab("Hanger").add("Fast mode", fastMode).withWidget(BuiltInWidgets.kBooleanBox)
-            .withPosition(6, 1)
-            .getEntry();
+        if (Constants.MODE == RobotMode.TESTING) {
+            leftVelocity = Shuffleboard.getTab("Hanger").add("Left hanger", left.getEncoder().getVelocity()).withWidget(BuiltInWidgets.kGraph)
+                .withProperties(Map.of("lower bound", -0.5, "upper bound", 10.5, "automatic bounds", false, "unit", "RPM"))
+                .withPosition(2, 0)
+                .getEntry();
+            rightVelocity = Shuffleboard.getTab("Hanger").add("Right hanger", right.getEncoder().getVelocity()).withWidget(BuiltInWidgets.kGraph)
+                .withProperties(Map.of("lower bound", -0.5, "upper bound", 10.5, "automatic bounds", false, "unit", "RPM"))
+                .withPosition(5, 0)
+                .getEntry();
+        }
+
+        ShuffleboardLayout settings = Shuffleboard.getTab("Hanger").getLayout("Settings", BuiltInLayouts.kList)
+            .withPosition(0, 0)
+            .withSize(2, 2);
+        idleMode = settings.add("HIGH BAR", highBar).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
+        hangerSpeed = settings.add("Fast mode", fastMode).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
     }
 
     // This method will be called once per scheduler run
     @Override
     public void periodic() {
-        leftVelocity.setNumber(left.getEncoder().getVelocity() / 1000);
-        rightVelocity.setNumber(right.getEncoder().getVelocity() / 1000);
+        if (Constants.MODE == RobotMode.TESTING) {
+            leftVelocity.setNumber(left.getEncoder().getVelocity() / 1000);
+            rightVelocity.setNumber(right.getEncoder().getVelocity() / 1000);
+        }
 
         hangerSpeed.setBoolean(fastMode);
         idleMode.setBoolean(highBar);

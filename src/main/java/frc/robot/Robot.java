@@ -1,12 +1,11 @@
 package frc.robot;
 
-import edu.wpi.first.hal.FRCNetComm.tInstances;
-import edu.wpi.first.hal.FRCNetComm.tResourceType;
-import edu.wpi.first.networktables.NetworkTableEntry;
-
 import java.util.Map;
 
+import edu.wpi.first.hal.FRCNetComm.tInstances;
+import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;

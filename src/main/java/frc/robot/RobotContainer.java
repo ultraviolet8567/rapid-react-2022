@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.RobotMode;
 import frc.robot.commands.*;
 import frc.robot.commands.hanger.*;
 import frc.robot.subsystems.*;
@@ -32,11 +33,10 @@ public class RobotContainer {
 
     // Shuffleboard tabs
     public final ShuffleboardTab matchTab = Shuffleboard.getTab("Match Data");
-    public final ShuffleboardTab driveSettings = Shuffleboard.getTab("Drive Settings");
-    public final ShuffleboardTab collectionTab = Shuffleboard.getTab("Collection");
-    public final ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
-    public final ShuffleboardTab hangerTab = Shuffleboard.getTab("Hanger");
     public final ShuffleboardTab limelightTab = Shuffleboard.getTab("Limelight");
+    public final ShuffleboardTab collectionTab = Shuffleboard.getTab("Collection");
+    public final ShuffleboardTab hangerTab = Shuffleboard.getTab("Hanger");
+    public final ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
 
     // Subsystems
     public final Shooter m_shooter = new Shooter();
@@ -103,7 +103,7 @@ public class RobotContainer {
         final JoystickButton leftBumper = new JoystickButton(xboxController, XboxController.Button.kLeftBumper.value);        
         leftBumper.toggleWhenPressed(new Shoot(m_shooter, m_collection), true);
 
-        if (Constants.TESTING) {
+        if (Constants.MODE == RobotMode.TESTING) {
             final JoystickButton buttonX = new JoystickButton(xboxController, XboxController.Button.kX.value);
             buttonX.whenPressed(new ShootToggle(m_shooter), true);
 

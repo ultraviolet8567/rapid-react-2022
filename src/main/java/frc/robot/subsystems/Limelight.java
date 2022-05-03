@@ -55,7 +55,7 @@ public class Limelight extends SubsystemBase {
             .getEntry();
         calculated_speed = Shuffleboard.getTab("Shooter").add("Calculated big velocity", 0).withWidget(BuiltInWidgets.kTextView)
             .withSize(2, 1)
-            .withPosition(6, 2)
+            // .withPosition(6, 2)
             .getEntry();
 
         limelight.getEntry("ledMode").setDouble(0);
