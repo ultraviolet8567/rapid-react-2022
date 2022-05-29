@@ -1,28 +1,33 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
+
 import java.util.Map;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import com.revrobotics.SparkMaxPIDController;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.RobotMode;
+import frc.robot.RobotContainer;
 
 
 public class Collection extends SubsystemBase {
     private CANSparkMax intake;
     public CANSparkMax conveyor;
+
+    private DoubleSolenoid solenoid;
 
     private DigitalInput detectorTop;
     private DigitalInput detectorBottom;
@@ -37,9 +42,12 @@ public class Collection extends SubsystemBase {
 
     public Collection() {
         intake = new CANSparkMax(7, MotorType.kBrushless);
-        intake.setInverted(true);
 
         conveyor = new CANSparkMax(8, MotorType.kBrushless);
+        conveyor.setInverted(true);
+
+        solenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
+        solenoid.set(kOff);
 
         detectorTop = new DigitalInput(0);
         detectorBottom = new DigitalInput(1);
@@ -100,9 +108,35 @@ public class Collection extends SubsystemBase {
         return !detectorBottom.get();
     }
 
+    public Status intakeStatus() {
+        if (solenoid.get() == kReverse) {
+            return Status.EXTENDED;
+        }
+        else {
+            return Status.RETRACTED;
+        }
+    }
+
     public void toggleDirection() {
         directionReversed = !directionReversed;
         reversedToggle.setBoolean(directionReversed);
+    }
+
+    public void extend() {
+        solenoid.set(kReverse);
+    }
+
+    public void retract() {
+        solenoid.set(kForward);
+    }
+
+    public void toggleIntake() {
+        if (solenoid.get() == kForward) {
+            solenoid.set(kReverse);
+        }
+        else {
+            solenoid.set(kForward);
+        }
     }
 
     // Sets a parameter (type) of the intake to the given value (setPoint)
@@ -117,5 +151,10 @@ public class Collection extends SubsystemBase {
     public void runConveyor(double setPoint, ControlType type) {
         SparkMaxPIDController pid_controller = RobotContainer.getDefaultPIDController(conveyor);
         pid_controller.setReference(setPoint, type);
+    }
+
+    public enum Status {
+        EXTENDED,
+        RETRACTED;
     }
 }

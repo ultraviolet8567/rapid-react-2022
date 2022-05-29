@@ -8,7 +8,9 @@ import com.revrobotics.SparkMaxPIDController;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -37,6 +39,7 @@ public class RobotContainer {
     public final ShuffleboardTab collectionTab = Shuffleboard.getTab("Collection");
     public final ShuffleboardTab hangerTab = Shuffleboard.getTab("Hanger");
     public final ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
+    public final ShuffleboardTab pneumaticsTab = Shuffleboard.getTab("Pneumatics");
 
     // Subsystems
     public final Shooter m_shooter = new Shooter();
@@ -50,9 +53,11 @@ public class RobotContainer {
     private final XboxController hangerController = new XboxController(1);
 
     // Cameras
-    public UsbCamera frontCamera = CameraServer.startAutomaticCapture(0);
-    public UsbCamera backCamera = CameraServer.startAutomaticCapture(1);
-    public HttpCamera limelightFeed = new HttpCamera("limelight", "http://10.85.67.11:5800/stream.mjpg");
+    public final UsbCamera frontCamera = CameraServer.startAutomaticCapture(0);
+    public final HttpCamera limelightFeed = new HttpCamera("limelight", "http://10.85.67.11:5800/stream.mjpg");
+
+    // Compressor
+    public final Compressor compressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
 
     // Autonomous chooser
     SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -76,11 +81,15 @@ public class RobotContainer {
         // Send cameras to Shuffleboard
         matchTab.add("Front camera", frontCamera).withWidget(BuiltInWidgets.kCameraStream)
             .withSize(5, 3)
+            .withProperties(Map.of("rotation", "HALF"))
             .withPosition(0, 1);
         matchTab.add("Limelight", limelightFeed).withWidget(BuiltInWidgets.kCameraStream)
             .withSize(5, 3)
             .withPosition(5, 1)
-            .withProperties(Map.of("show crosshair", false, "show controls", false));;
+            .withProperties(Map.of("show crosshair", false, "show controls", false));
+
+        // Turn on the compressor
+        compressor.enableDigital();
     }
 
     /**
