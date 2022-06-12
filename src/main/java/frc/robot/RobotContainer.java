@@ -11,7 +11,9 @@ import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -39,7 +41,7 @@ public class RobotContainer {
     public final ShuffleboardTab collectionTab = Shuffleboard.getTab("Collection");
     public final ShuffleboardTab hangerTab = Shuffleboard.getTab("Hanger");
     public final ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
-    public final ShuffleboardTab pneumaticsTab = Shuffleboard.getTab("Pneumatics");
+    public final ShuffleboardTab powerTab = Shuffleboard.getTab("Power");
 
     // Subsystems
     public final Shooter m_shooter = new Shooter();
@@ -54,10 +56,14 @@ public class RobotContainer {
 
     // Cameras
     public final UsbCamera frontCamera = CameraServer.startAutomaticCapture(0);
+    public final UsbCamera jackCamera = CameraServer.startAutomaticCapture(1);
     public final HttpCamera limelightFeed = new HttpCamera("limelight", "http://10.85.67.11:5800/stream.mjpg");
 
     // Compressor
     public final Compressor compressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
+
+    // Power Distribution Panel (PDP)
+    public final PowerDistribution pdp = new PowerDistribution(0, ModuleType.kCTRE);
 
     // Autonomous chooser
     SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -71,9 +77,9 @@ public class RobotContainer {
         m_drivetrain.setDefaultCommand(new Drive(m_drivetrain));
         
         // Configure autonomous sendable chooser and send to Shuffleboard
-        m_chooser.addOption("Drive out auto", new AutoDriveOut(m_drivetrain, m_collection));
-        m_chooser.setDefaultOption("One ball auto", new AutoOneBall(m_drivetrain, m_collection, m_shooter));
-        m_chooser.addOption("Two ball auto", new AutoTwoBall(m_drivetrain, m_collection, m_shooter));
+        m_chooser.addOption("Drive out auto", new AutoDriveOut(m_drivetrain));
+        m_chooser.addOption("One ball auto", new AutoOneBall(m_drivetrain, m_collection, m_shooter));
+        m_chooser.setDefaultOption("Two ball auto", new AutoTwoBall(m_drivetrain, m_collection, m_shooter));
         matchTab.add("Auto mode", m_chooser).withWidget(BuiltInWidgets.kComboBoxChooser)
             .withSize(2, 1)
             .withPosition(8, 0);
@@ -83,6 +89,10 @@ public class RobotContainer {
             .withSize(5, 3)
             .withProperties(Map.of("rotation", "HALF"))
             .withPosition(0, 1);
+        hangerTab.add("Jack camera", jackCamera).withWidget(BuiltInWidgets.kCameraStream)
+            .withSize(5, 3)
+            .withProperties(Map.of("rotation", "QUARTER_CCW"))
+            .withPosition(2, 0);
         matchTab.add("Limelight", limelightFeed).withWidget(BuiltInWidgets.kCameraStream)
             .withSize(5, 3)
             .withPosition(5, 1)
@@ -112,14 +122,13 @@ public class RobotContainer {
         final JoystickButton leftBumper = new JoystickButton(xboxController, XboxController.Button.kLeftBumper.value);        
         leftBumper.toggleWhenPressed(new Shoot(m_shooter, m_collection), true);
 
+        final JoystickButton buttonB = new JoystickButton(xboxController, XboxController.Button.kB.value);
+        buttonB.whenPressed(new ShootDistance(m_shooter), true);
+
         if (Constants.MODE == RobotMode.TESTING) {
             final JoystickButton buttonX = new JoystickButton(xboxController, XboxController.Button.kX.value);
-            buttonX.whenPressed(new ShootToggle(m_shooter), true);
-
-            final JoystickButton buttonB = new JoystickButton(xboxController, XboxController.Button.kB.value);
-            buttonB.whenPressed(new ShootDistance(m_shooter), true);
+            buttonX.whenPressed(new ShootToggle(m_shooter), true);  
         }
-
 
         final JoystickButton h_leftStick = new JoystickButton(hangerController, XboxController.Button.kLeftStick.value);
         h_leftStick.whenPressed(new HangerToggle(m_hanger), true);

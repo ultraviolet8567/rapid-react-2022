@@ -50,7 +50,7 @@ public class Drive extends CommandBase {
             // Split control drive
             m_drivetrain.getDifferentialDrive().arcadeDrive(
                 -xbox.getLeftY(),
-                xbox.getRightX() / Math.sqrt(2),
+                xbox.getRightX(),
                 true);
         }
     }

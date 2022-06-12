@@ -42,8 +42,6 @@ public class AutoOneBall extends CommandBase {
             .withProperties(Map.of("min", 0, "max", 15, "show value", true))
             .getEntry();
             
-        m_collection.runIntake(-Constants.intakeSpeed / 10, ControlType.kVelocity);
-
         m_shooter.setMode("Fender");
     }
 
@@ -52,9 +50,6 @@ public class AutoOneBall extends CommandBase {
     public void execute() {
         stopwatch.setNumber(timer.get());
         
-        if (timer.get() > 2) {
-            m_collection.runIntake(0, ControlType.kVelocity);
-        }
         if (timer.get() > 3) {
             m_collection.runConveyor(Constants.conveyorSpeed, ControlType.kVelocity);
         }

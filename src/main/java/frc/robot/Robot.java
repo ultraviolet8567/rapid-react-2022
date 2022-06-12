@@ -6,12 +6,14 @@ import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Shooter.Velocity;
 
 
 /**
@@ -28,6 +30,10 @@ public class Robot extends TimedRobot {
 
     private NetworkTableEntry postTime;
 
+    private NetworkTableEntry voltage;
+    private NetworkTableEntry current;
+    private NetworkTableEntry shooterOn;
+
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
@@ -40,10 +46,28 @@ public class Robot extends TimedRobot {
         HAL.report(tResourceType.kResourceType_Framework, tInstances.kFramework_RobotBuilder);
 
         postTime = Shuffleboard.getTab("Match Data").add("Time left", 0).withWidget(BuiltInWidgets.kNumberBar)
-            .withProperties(Map.of("min", 0, "max", 195))
+            .withProperties(Map.of("min", 0, "max", 135))
             .withPosition(0, 0)
             .withSize(2, 1)
             .getEntry();
+        
+        voltage = Shuffleboard.getTab("Power").add("Battery Voltage", 0).withWidget(BuiltInWidgets.kGraph)
+            .withProperties(Map.of("lower bound", -0.5, "upper bound", 15.5, "automatic bounds", false, "unit", "V"))
+            .withPosition(0, 0)
+            .getEntry();
+         
+        current = Shuffleboard.getTab("Power").add("Battery Current", 0).withWidget(BuiltInWidgets.kGraph)
+            .withProperties(Map.of("lower bound", -0.5, "upper bound", 15.5, "automatic bounds", false, "unit", "Amps"))
+            .withPosition(3, 0)
+            .getEntry();
+
+        // Shooter on message
+        shooterOn = Shuffleboard.getTab("Match Data").add("Shooter on", false).withWidget(BuiltInWidgets.kBooleanBox)
+            .withSize(1, 1)
+            .withPosition(2, 0)
+            .getEntry();
+
+        NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setDouble(1);
     }
 
     /**
@@ -59,15 +83,20 @@ public class Robot extends TimedRobot {
         // commands, running already-scheduled commands, removing finished or interrupted commands,
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
         // block in order for anything in the Command-based framework to work.
-        postTime.setNumber(195 - Timer.getMatchTime());
+        postTime.setNumber(Timer.getMatchTime());
 
         CommandScheduler.getInstance().run();
+
+        voltage.setDouble(RobotContainer.getInstance().pdp.getVoltage());
+        current.setDouble(RobotContainer.getInstance().pdp.getTotalCurrent());
+        shooterOn.setBoolean(RobotContainer.getInstance().m_shooter.getVelocity() != Velocity.OFF);
     }
 
 
     // This function is called once each time the robot enters Disabled mode
     @Override
     public void disabledInit() {
+        NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setDouble(1);
     }
 
     @Override
@@ -83,6 +112,8 @@ public class Robot extends TimedRobot {
         if (m_autonomousCommand != null) {
             m_autonomousCommand.schedule();
         }
+
+        NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setDouble(0);
     }
 
     // This function is called periodically during autonomous
@@ -99,6 +130,8 @@ public class Robot extends TimedRobot {
         if (m_autonomousCommand != null) {
             m_autonomousCommand.cancel();
         }
+
+        NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setDouble(0);
     }
 
     // This function is called periodically during operator control

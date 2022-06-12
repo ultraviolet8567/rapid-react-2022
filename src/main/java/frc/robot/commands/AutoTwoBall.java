@@ -8,6 +8,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Collection;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Collection.Status;
 
 
 public class AutoTwoBall extends CommandBase {
@@ -31,26 +32,33 @@ public class AutoTwoBall extends CommandBase {
         timer = new Timer();
         timer.start();
 
-        m_collection.runIntake(-Constants.intakeSpeed / 10, ControlType.kVelocity);
+        m_collection.extend();
     }
-// Called every time the scheduler runs while the command is scheduled.
+    // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        if (timer.get() >= 11.75) {
-            m_collection.runConveyor(Constants.conveyorSpeed * 0.9, ControlType.kVelocity);
-        }
-        else if (timer.get() >= 11.25) {
-            m_drivetrain.stopMotors();
-        }
-        else if (timer.get() >= 6.25) {
-            m_shooter.setMode("Fender");
-            m_drivetrain.getDifferentialDrive().arcadeDrive(-0.5, 0);
-        }
-        else if (timer.get() >= 6) {
-            m_drivetrain.stopMotors();
-        }
-        else if (timer.get() > 1) {
+        if (m_collection.intakeStatus() == Status.EXTENDED) {
             m_collection.runIntake(Constants.intakeSpeed, ControlType.kVelocity);
+        }
+        else {
+            m_collection.runIntake(0, ControlType.kVelocity);
+        }
+
+        if (timer.get() >= 11.5) {
+            m_drivetrain.stopMotors();
+            m_collection.runConveyor(Constants.conveyorSpeed, ControlType.kVelocity);
+        }
+        else if (timer.get() >= 9.75) {
+            m_shooter.setMode("Fender");
+        }
+        else if (timer.get() >= 5.75) {
+            m_drivetrain.getDifferentialDrive().arcadeDrive(-0.5, 0);
+            m_collection.retract();
+        }
+        else if (timer.get() >= 5.5) {
+            m_drivetrain.stopMotors();
+        }
+        else if (timer.get() >= 0.5) {
             m_drivetrain.getDifferentialDrive().arcadeDrive(0.5, 0);
         }
     }
@@ -63,6 +71,7 @@ public class AutoTwoBall extends CommandBase {
 
         m_collection.runIntake(0, ControlType.kVelocity);
         m_collection.runConveyor(0, ControlType.kVelocity);
+        m_collection.retract();
     
         m_drivetrain.stopMotors();
     }

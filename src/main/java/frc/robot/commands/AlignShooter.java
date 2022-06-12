@@ -41,7 +41,7 @@ public class AlignShooter extends CommandBase {
     public void execute() {
         if (aligned) {
             m_drivetrain.getDifferentialDrive().stopMotor();
-            if (timer.get() >= 0.75) {
+            if (timer.get() >= 1) {
                 RobotContainer.getInstance().getXboxController().setRumble(RumbleType.kLeftRumble, 0.75);
                 RobotContainer.getInstance().getXboxController().setRumble(RumbleType.kRightRumble, 0.75);
             }
@@ -58,7 +58,7 @@ public class AlignShooter extends CommandBase {
                 aligned = true;
             }
             else {
-                double kP = 0.02;
+                double kP = 0.04;
                 double min = 0.2;
                 double turn = kP * m_limelight.hOffset;
 

@@ -41,28 +41,27 @@ public class Shooter extends SubsystemBase {
             .withPosition(3, 0)
             .getEntry();
 
+        bVelocity = Shuffleboard.getTab("Shooter").add("Big flywheel", 0).withWidget(BuiltInWidgets.kGraph)
+            .withProperties(Map.of("lower bound", -0.5, "upper bound", 70.5, "automatic bounds", false, "unit", "RPM"))
+            .getEntry();
+        sVelocity = Shuffleboard.getTab("Shooter").add("Small flywheel", 0).withWidget(BuiltInWidgets.kGraph)
+            .withProperties(Map.of("lower bound", -0.5, "upper bound", 70.5, "automatic bounds", false, "unit", "RPM"))
+            .getEntry();
+        bSet = Shuffleboard.getTab("Shooter").add("Big flywheel set speed", calibrationSpeed / 1000).withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0.5, "max", 70, "block increment", 0.01))
+            .withPosition(6, 0)
+            .getEntry();
+        sSet = Shuffleboard.getTab("Shooter").add("Small flywheel set speed", calibrationSpeed * Constants.flywheelRatio / 1000).withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0.5, "max", 70, "block increment", 0.01))
+            .withPosition(6, 1)
+            .getEntry();
+        
         if (Constants.MODE == RobotMode.TESTING) {
-                bVelocity = Shuffleboard.getTab("Shooter").add("Big flywheel", 0).withWidget(BuiltInWidgets.kGraph)
-                .withProperties(Map.of("lower bound", -0.5, "upper bound", 70.5, "automatic bounds", false, "unit", "RPM"))
-                .getEntry();
-            sVelocity = Shuffleboard.getTab("Shooter").add("Small flywheel", 0).withWidget(BuiltInWidgets.kGraph)
-                .withProperties(Map.of("lower bound", -0.5, "upper bound", 70.5, "automatic bounds", false, "unit", "RPM"))
-                .getEntry();
-                
             bNumVelocity = Shuffleboard.getTab("Shooter").add("Big V", 0).withWidget(BuiltInWidgets.kTextView)
                 .withPosition(0, 3)
                 .getEntry();
             sNumVelocity = Shuffleboard.getTab("Shooter").add("Small V", 0).withWidget(BuiltInWidgets.kTextView)
                 .withPosition(1, 3)
-                .getEntry();
-
-            bSet = Shuffleboard.getTab("Shooter").add("Big flywheel set speed", calibrationSpeed / 1000).withWidget(BuiltInWidgets.kNumberSlider)
-                .withProperties(Map.of("min", 0.5, "max", 70, "block increment", 0.01))
-                .withPosition(6, 0)
-                .getEntry();
-            sSet = Shuffleboard.getTab("Shooter").add("Small flywheel set speed", calibrationSpeed * Constants.flywheelRatio / 1000).withWidget(BuiltInWidgets.kNumberSlider)
-                .withProperties(Map.of("min", 0.5, "max", 70, "block increment", 0.01))
-                .withPosition(6, 1)
                 .getEntry();
         }
     }
@@ -72,15 +71,15 @@ public class Shooter extends SubsystemBase {
     public void periodic() {
         velocitiesToggle.setString(velocity.toString());
 
-        if (Constants.MODE == RobotMode.TESTING) {
-            bVelocity.setNumber(bigFlywheel.getEncoder().getVelocity() / 1000);
-            sVelocity.setNumber(smallFlywheel.getEncoder().getVelocity() / 1000);
+        bVelocity.setNumber(bigFlywheel.getEncoder().getVelocity() / 1000);
+        sVelocity.setNumber(smallFlywheel.getEncoder().getVelocity() / 1000);
+        calibrationSpeed = 1000 * bSet.getDouble(calibrationSpeed);
+            
+        sSet.setNumber(calibrationSpeed * Constants.flywheelRatio / 1000);
 
+        if (Constants.MODE == RobotMode.TESTING) {
             bNumVelocity.setNumber(bigFlywheel.getEncoder().getVelocity() / 1000);
             sNumVelocity.setNumber(smallFlywheel.getEncoder().getVelocity() / 1000);
-            
-            calibrationSpeed = 1000 * bSet.getDouble(calibrationSpeed);
-            sSet.setNumber(calibrationSpeed * Constants.flywheelRatio / 1000);
         }
 
         runFlywheels();
@@ -172,6 +171,10 @@ public class Shooter extends SubsystemBase {
                 velocity = Velocity.OFF;
                 break;
         }
+    }
+
+    public Velocity getVelocity() {
+        return velocity;
     }
 
     public enum Velocity {

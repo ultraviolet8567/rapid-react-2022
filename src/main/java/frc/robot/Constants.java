@@ -15,7 +15,7 @@ public final class Constants {
         MATCH
     }
 
-    public static final RobotMode MODE = RobotMode.TESTING;
+    public static final RobotMode MODE = RobotMode.MATCH;
 
     public static final double intakeSpeed = 14.5 * 1000;
     public static final double conveyorSpeed = -10 * 1000;
@@ -26,8 +26,8 @@ public final class Constants {
     public static final double hubBigSpeed = 5 * 1000;
     public static final double hubSmallSpeed = 11.5 * 1000;
     
-    public static final double fenderBigSpeed = 9.89 * 1000;
-    public static final double fenderSmallSpeed = 15.55 * 1000;
+    public static final double fenderBigSpeed = 8.49 * 1000; // 9.89 * 1000;
+    public static final double fenderSmallSpeed = 13.35 * 1000; // 15.55 * 1000;
     
     public static final double distanceBigSpeed = 11 * 1000;
     public static final double distanceSmallSpeed = 11 * 1000;
@@ -36,13 +36,13 @@ public final class Constants {
 
     public static final class Limelight {
         // Flywheel speed equation coefficients
-        public static final double A = -0.0548;
-        public static final double B = 1.45;
-        public static final double C = -76.7;
-        public static final double D = 11600;
-        public static final double A2 = 1.08;
-        public static final double B2 = -105;
-        public static final double C2 = 11400;
+        public static final double A = -0.0775;
+        public static final double B = 2.76;
+        public static final double C = -55.4;
+        public static final double D = 10100;
+        // public static final double A2 = 1.08;
+        // public static final double B2 = -105;
+        // public static final double C2 = 11400;
 
 
         // Upper hub height in inches
