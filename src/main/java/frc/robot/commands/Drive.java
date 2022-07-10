@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
@@ -27,16 +28,14 @@ public class Drive extends CommandBase {
             if (Math.abs(xbox.getLeftY()) > 0.1 || Math.abs(xbox.getLeftX()) > 0.1) {
                 // Normal single stick drive
                 m_drivetrain.getDifferentialDrive().arcadeDrive(
-                    -xbox.getLeftY(),
-                    xbox.getLeftX(),
+                    -xbox.getLeftX(),
+                    xbox.getLeftY(),
                     true);
+                m_drivetrain.stopMotors();
             }
             else {
                 // Fine-tuning single stick drive
-                m_drivetrain.getDifferentialDrive().arcadeDrive(
-                    -0.5 * xbox.getRightY(),
-                    0.5 * xbox.getRightX(),
-                    true);
+                SmartDashboard.putString("IMPORTANT INFO", "get good at driving");
             }
         }
         else if (m_drivetrain.isTankDrive()) {

@@ -16,7 +16,6 @@ public final class Main {
     public static void main(String... args) {
         if(true) {
             System.out.println("this does nothing!");
-
         }
 
         RobotBase.startRobot(Robot::new);

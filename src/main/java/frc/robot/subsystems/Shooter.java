@@ -80,7 +80,7 @@ public class Shooter extends SubsystemBase {
             return new double[] { Constants.fenderBigSpeed, Constants.fenderSmallSpeed };
         }
         else if (velocity == "Distance") {
-            return new double[] { Constants.distanceBigSpeed, Constants.distanceSmallSpeed };
+            return new double[] { Constants.distanceBigSpeed, Constants.distanceSmallSpee };
         }
         // Lower hub
         else {
